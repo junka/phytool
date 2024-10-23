@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <unistd.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <sys/socket.h>
@@ -112,32 +113,55 @@ uint32_t phy_id(const struct loc *loc)
 	return (id[0] << 16) | id[1];
 }
 
-static int parse_phy_id(char *text, uint16_t *phy_id)
+static int get_phyad(const char *name)
 {
-	unsigned long port, dev;
-	char *end;
+	char buffer[sizeof(struct ethtool_link_settings) + sizeof(__u32) * 3 * 128];
+	struct ethtool_link_settings *link_settings;
+	struct ifreq ifr;
+	int err;
 
-	port = strtoul(text, &end, 0);
-	if (!end[0]) {
-		/* simple phy address */
-		*phy_id = port;
-		return 0;
+	int sd = -1;
+
+	link_settings = (struct ethtool_link_settings *)buffer;
+	memset(buffer, 0, sizeof(buffer));
+
+	sd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (sd < 0)
+		return sd;
+
+	strncpy(ifr.ifr_name, name, sizeof(ifr.ifr_name));
+	link_settings->cmd = ETHTOOL_GLINKSETTINGS;
+	ifr.ifr_data = (caddr_t)link_settings;
+
+	err = ioctl(sd, SIOCETHTOOL, &ifr);
+	if (err < 0) {
+		close(sd);
+		return err;
 	}
 
-	if (end[0] != ':') {
-		/* not clause 45 either */
-		return 1;
-	}
+	/* we expect a strictly negative value from kernel.
+	 */
+	if (link_settings->link_mode_masks_nwords >= 0
+	    || link_settings->cmd != ETHTOOL_GLINKSETTINGS)
+		return err;
 
-	dev = strtoul(end + 1, &end, 0);
-	if (end[0])
-		return 1;
+	/* now send the real request */
+	link_settings->cmd = ETHTOOL_GLINKSETTINGS;
+	link_settings->link_mode_masks_nwords = -link_settings->link_mode_masks_nwords;
 
-	*phy_id = mdio_phy_id_c45(port, dev);
-	return 0;
+	err = ioctl(sd, SIOCETHTOOL, &ifr);
+	if (err < 0)
+		return err;
+
+	if (link_settings->link_mode_masks_nwords <= 0
+	    || link_settings->cmd != ETHTOOL_GLINKSETTINGS)
+		return err;
+
+	return link_settings->phy_address;
 }
 
-static int loc_segments(char *text, char **a, char **b, char **c)
+
+static int loc_segments(char *text, char **a, char **b)
 {
 	*a = strtok(text, "/");
 	if (!*a)
@@ -147,38 +171,51 @@ static int loc_segments(char *text, char **a, char **b, char **c)
 	if (!*b)
 		return 1;
 
-	*c = strtok(NULL, "/");
-	if (!*c)
-		return 2;
-
-	return 3;
+	return 2;
 }
 
-static int phytool_parse_loc_segs(char *dev, char *addr, char *reg,
+static int phytool_parse_loc_segs(char *dev, char *reg,
 				  struct loc *loc)
 {
-	int err;
-
 	strncpy(loc->ifnam, dev, IFNAMSIZ - 1);
 
-	err = parse_phy_id(addr, &loc->phy_id);
-	if (err)
-		return err;
+	int pad, mmd;
+	char *end;
 
-	loc->reg = reg ? strtoul(reg, NULL, 0) : REG_SUMMARY;
+	pad = get_phyad(dev);
+	if (pad < 0) {
+		return 1;
+	}
+
+	if (!reg) {
+		loc->phy_id = pad;
+		loc->reg = REG_SUMMARY;
+	} else {
+		mmd = strtoul(reg, &end, 0);
+		if (!end[0]) {
+			loc->phy_id = pad;
+			loc->reg = mmd;
+		} else if (end[0] == '.') {
+			loc->phy_id = mdio_phy_id_c45(pad, mmd);
+			loc->reg = strtoul(end + 1, NULL, 0);
+		} else {
+			return 1;
+		}
+	}
+
 	return 0;
 }
 
 static int phytool_parse_loc(char *text, struct loc *loc, int strict)
 {
-	char *dev = NULL, *addr = NULL, *reg = NULL;
+	char *dev = NULL, *reg = NULL;
 	int segs;
 
-	segs = loc_segments(text, &dev, &addr, &reg);
-	if (segs < (strict ? 3 : 2))
+	segs = loc_segments(text, &dev, &reg);
+	if (segs < (strict ? 2 : 1))
 		return -EINVAL;
 
-	return phytool_parse_loc_segs(dev, addr, reg, loc);
+	return phytool_parse_loc_segs(dev, reg, loc);
 }
 
 static int phytool_read(struct applet *a, int argc, char **argv)
@@ -194,7 +231,7 @@ static int phytool_read(struct applet *a, int argc, char **argv)
 		return 1;
 	}
 
-	val = phy_read (&loc);
+	val = phy_read(&loc);
 	if (val < 0)
 		return 1;
 
@@ -247,25 +284,22 @@ static int phytool_print(struct applet *a, int argc, char **argv)
 
 static int phytool_usage(int code)
 {
-	printf("Usage: %s read  IFACE/ADDR/REG\n"
-	       "       %s write IFACE/ADDR/REG <0-0xffff>\n"
-	       "       %s print IFACE/ADDR[/REG]\n"
+	printf("Usage: %s read  IFACE/[MMD.]REG\n"
+	       "       %s write IFACE/[MMD.]REG <0-0xffff>\n"
+	       "       %s print IFACE/[[MMD.]REG]\n"
 	       "\n"
 	       "Clause 22:\n"
 	       "\n"
-	       "ADDR := <0-0x1f>\n"
 	       "REG  := <0-0x1f>\n"
 	       "\n"
 	       "Clause 45 (not supported by all MDIO drivers):\n"
 	       "\n"
-	       "ADDR := PORT:DEV\n"
-	       "PORT := <0-0x1f>\n"
-	       "DEV  := <0-0x1f>\n"
+	       "MMD  := <0-0x1f>\n"
 	       "REG  := <0-0xffff>\n"
 	       "\n"
 	       "Examples:\n"
-	       "       %s read  eth0/0:4/0x1000\n"
-	       "       %s write eth0/0xa/0 0x1140\n"
+	       "       %s read  eth0/4.0x1000\n"
+	       "       %s write eth0/0 0x1140\n"
 	       "       %s print eth0/0x1c\n"
 	       "\n"
 	       "The `read` and `write` commands are simple register level\n"
@@ -273,7 +307,7 @@ static int phytool_usage(int code)
 	       "using the `print` command, the register is optional. If left out, the\n"
 	       "most common registers will be shown.\n"
 	       "\n"
-	       "Bug report address: https://github.com/wkz/phytool/issues\n"
+	       "Bug report address: https://github.com/junka/phytool/issues\n"
 	       "\n",
 	       __progname, __progname, __progname, __progname, __progname, __progname);
 	return code;
