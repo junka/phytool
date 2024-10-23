@@ -7,7 +7,6 @@ VERSION = 2
 NAME    = phytool
 PKG     = $(NAME)-$(VERSION)
 ARCHIVE = $(PKG).tar.xz
-APPLETS = mv6tool
 
 PREFIX ?= /usr/local/
 CFLAGS ?= -Wall -Wextra -Werror
@@ -38,8 +37,5 @@ dist:
 
 install: phytool
 	@cp phytool $(DESTDIR)/$(PREFIX)/bin/
-	@for app in $(APPLETS); do \
-		ln -sf phytool $(DESTDIR)/$(PREFIX)/bin/$$app; \
-	done
 	@mkdir -p $(DESTDIR)/$(MANDIR)/man8/
-	@cp -p phytool.8 mv6tool.8 -p $(DESTDIR)/$(MANDIR)/man8/
+	@cp -p phytool.8 -p $(DESTDIR)/$(MANDIR)/man8/

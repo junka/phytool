@@ -50,6 +50,5 @@ void print_attr_name(const char *name, int indent);
 void print_bool(const char *name, int on);
 
 int print_phytool(const struct loc *loc, int indent);
-int print_mv6tool(const struct loc *loc, int indent);
 
 #endif	/* __PHYTOOL_H */
