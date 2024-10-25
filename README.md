@@ -6,6 +6,8 @@ Linux MDIO register access
 Usage
 -----
 
+Unlike the original one, PHYAD was automatically filled, So read C22 register or C45 MMD.register directly.
+
     phytool read  IFACE/[MMD.]REG
     phytool write IFACE/[MMD.]REG <0-0xffff>
     phytool print IFACE/[[MMD.]REG]
