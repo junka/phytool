@@ -1,0 +1,249 @@
+---
+Manufactory: Marvell
+Name: MV88Q2110
+Registers:
+  - IEEE PMA/PMD Registers:
+      device: 1
+      regmap:
+        - PMA/PMD Control Register 1: 0x0000
+          Reset: 15
+          Speed Select: 6,13
+          Low Power: 11
+          PMA loopback: 0
+        - PMA/PMD Device Identifier Register 1: 0x0002
+        - PMA/PMD Device Identifier Register 2: 0x0003
+          OUI: 10-15
+          Model Number: 4-9
+          Revision Number: 0-3
+        - PMA/PMD Speed Ability Register: 0x0004
+        - PMA/PMD Devices In Package Register 1: 0x0005
+        - PMA/PMD Devices In Package Register 2: 0x0006
+        - PMA/PMD Package Identifier Register 1: 0x000E
+        - PMA/PMD Package Identifier Register 2: 0x000F
+        - BASE-T1 PMD/PMA Extended Ability Register: 0x0012
+        - BASE-T1 PMD/PMA Control Register: 0x0834
+        - 100BASE-T1 PMA/PMD Test Control Register: 0x0836
+        - BASE-T1 Control Register: 0x0900
+        - 1000BASE-T1 PMA Status Register: 0x0901
+        - 1000BASE-T1 Training Register: 0x0902
+        - 1000BASE-T1 Link Partner Training Register: 0x0903
+        - 1000Base-T1 Test Mode Control Register: 0x0904
+
+  - Common Control Registers:
+      device: 3
+      regmap:
+        - Reset and Control Register: 0x8000
+        - Tx Disable Status Register: 0x8002
+        - SyncE Control Register: 0x8004
+        - Interrupt Enable Register: 0x8010
+        - GPIO Interrupt Status Register: 0x8011
+        - Temperature Sensor Register 2: 0x8041
+        - Temperature Sensor Register 3: 0x8042
+        - Temperature Sensor Register 4: 0x8043
+        - Interrupt Enable Register: 0xFE16
+        - Interrupt Status Register: 0xFE17
+        - TDR Control Register: 0xFEC3
+        - TDR Status Register 1: 0xFEDB
+        - TDR Status Register 2: 0xFEDC
+        - IO Voltage Control Register: 0x8214
+        - LPSD Register 1: 0x801C
+        - LPSD Register 2: 0x801D
+        - SQI Register: 0xFC4C
+  - IEEE PCS Registers:
+      device: 3
+      regmap:
+        - PCS Control Register 1: 0x0000
+        - PCS Status Register 1: 0x0001
+        - PCS Device Identifier Register 1: 0x0002
+        - PCS Device Identifier Register 2: 0x0003
+        - PCS Device In Package Register 1: 0x0005
+        - PCS Device In Package Register 2: 0x0006
+        - PCS Status Register 2: 0x0008
+        - PCS Package Identifier Register 1: 0x000E
+        - PCS Package Identifier Register 2: 0x000F
+        - 1000BASE-T1 PCS Status Register 2: 0x0021
+        - PCS Control Register: 0x0900
+        - PCS 1000BASE-T1 Status Register 1: 0x0901
+        - PCS 1000BASE-T1 Status Register 2: 0x0902
+        - OAM Register 0: 0x0904
+        - OAM Register 1: 0x0905
+        - OAM Register 2: 0x0906
+        - OAM Register 3: 0x0907
+        - OAM Register 4: 0x0908
+        - OAM Register 5: 0x0909
+        - OAM Register 6: 0x090A
+        - OAM Register 7: 0x090B
+        - OAM Register 8: 0x090C
+        - OAM Register 9: 0x090D
+
+  - IEEE Auto-Negotiation Registers:
+      device: 7
+      regmap:
+        - Auto-Negotiation Device Identifier Register 1: 0x0002
+        - Auto-Negotiation Device Identifier Register 2: 0x0003
+        - Auto-Negotiation Devices In Package Register 1: 0x0005
+        - Auto-Negotiation Devices In Package Register 2: 0x0006
+        - Auto-Negotiation Package Identifier Register 1: 0x000E
+        - Auto-Negotiation Package Identifier Register 2: 0x000F
+        - BASE-T1 Auto-Negotiation Control Register: 0x0200
+        - BASE-T1 Auto-Negotiation Status Register: 0x0201
+        - Auto-Negotiation Advertisement Register 1: 0x0202
+        - Auto-Negotiation Advertisement Register 2: 0x0203
+        - Auto-Negotiation Advertisement Register 3: 0x0204
+        - Link Partner Base Page Ability Register 1: 0x0205
+        - Link Partner Base Page Ability Register 2: 0x0206
+        - Link Partner Base Page Ability Register 3: 0x0207
+        - Next Page Transmit/Extended Next Page Transmit Register: 0x0208
+        - Extended Next Page Transmit Unformatted Code Field U0 to U15 Register: 0x0209
+        - Extended Next Page Transmit Unformatted Code Field U16 to U31 Register: 0x020A
+        - Link Partner Next Page/Link Partner Extended Next Page Ability Register: 0x020B
+        - Link Partner Extended Next Page Ability Unformatted Code Field U0 to U15 Register: 0x020C
+        - Link Partner Extended Next Page Ability Unformatted Code Field U16 to U31 Register: 0x020D
+ 
+  - 100BASE-T1 Copper Unit Advance PCS Registers:
+      device: 3
+      regmap:
+        - 100BASE-T1 Copper Control Register: 0x8100
+        - 100BASE-T1 Status Register: 0x8108
+        - 100BASE-T1 Status Register: 0x8109
+        - 100BASE-T1 Specific Interrupt Enable Register: 0x8112
+        - Copper Interrupt Status Register: 0x8113
+        - Interrupt Status Register: 0x8117
+        - Link Drop Counter Register: 0x8120
+        - MAC Specific Control Register: 0x8210
+        - MAC Specific Interrupt Enable Register: 0x8212
+        - MAC Specific Status Register: 0x8213
+        - Tx FIFO Overflow/Underflow Counter Register: 0x8214
+        - Counter Control Register: 0x8220
+        - Bad Link Counter Register: 0x8221
+        - Bad SSD Counter Register: 0x8222
+        - Bad ESD Counter Register: 0x8223
+        - Rx Error Counter Register: 0x8224
+        - Receiver Status Register: 0x8230
+        - Interrupt Enable Register: 0x8300
+        - Interrupt Status Register: 0x8301
+        - GPIO/TX_ENABLE Control Register: 0x8302
+        - GPIO/TX_ENABLE Control Register: 0x8303
+        - GPIO/TX_ENABLE Control Register: 0x8304
+        - GPIO/LED Control Register: 0x8305
+        - LED Function Control Register: 0x8310
+        - LED Polarity Control Register: 0x8311
+        - LED Timer/INTn Control Register: 0x8312
+        - Copper Port Packet Generation Register: 0x8610
+        - Copper Port Packet Size Register: 0x8611
+        - Checker Control Register: 0x8612
+        - Packet Generator Control Register: 0x8613
+        - Copper Port Packet Counter Register: 0x8614
+        - Copper Port CRC Counter Register: 0x8615
+        - BIST Control Register: 0x8617
+        - BIST Status Register: 0x8618
+        - BIST Counters Register: 0x8619
+  - 1000BASE-T1 Copper Unit Advance PCS Registers:
+      device: 3
+      regmap:
+        - GPIO Data Register: 0x8012
+        - GPIO Function and Interrupt Tri-state Control Register: 0x8013
+        - GPIO Interrupt Register: 0x8014
+        - Open Drain Control Register: 0x8015
+        - Function Control Register: 0x8016
+        - LED[1:0] Polarity Control Register: 0x8017
+        - LED Timer Control Register: 0x8018
+        - PCS Control Register 1: 0xFD00
+        - Packet Generator Control Register: 0xFD04
+        - Packet Generator Parameters Register: 0xFD05
+        - Packet Checker Control Register: 0xFD07
+        - Packet Checker Counter Register: 0xFD08
+        - Tx FIFO Control Register: 0xFD20
+
+  - Copper Unit Advance Auto-Negotiation Registers:
+      device: 7
+      regmap:
+        - Auto-Negotiation Status Register: 0x8001
+        - Auto-Negotiation Status 2 Register: 0x8016
+        - Auto-Negotiation Status Register 2: 0x801A
+  - RGMII Registers:
+      device: 31
+      regmap:
+        - RGMII Output Impedance Control Register: 0x8000
+        - Com Port Control Reister: 0x8001
+  - SGMII Registers:
+      device: 4
+      regmap:
+        - SGMII Control Register: 0x8000
+        - SGMII Status Register: 0x8001
+        - PHY Identifier Register 1: 0x8002
+        - PHY Identifier Register 2: 0x8003
+        - SGMII Auto-Negotiation Advertisement: 0x8004
+        - SGMII Link Partner Ability/SGMII: 0x8005
+        - SGMII Auto-Negotiation Expansion Register: 0x8006
+        - SGMII SERDES Specific Control 1 Register: 0x8010
+        - SGMII Specific Status Register: 0x8011
+        - SGMII Interrupt Enable Register: 0x8012
+        - SGMII Interrupt Status Register: 0x8013
+        - SGMII Receive Error Counter Register: 0x8015
+        - PRBS Control Register: 0x8017
+        - PRBS Error Counter LSB Register: 0x8018
+        - PRBS Error Counter MSB Register: 0x8019
+        - SGMII Specific Control Register 2: 0x801A
+        
+  - PTP Registers:
+      device: 4
+      regmap:
+        - PTP Reset Control Register: 0x8600
+        - PTP Control Register 1: 0x87F0
+        - PTP Control Register 2: 0x87F1
+        - PTP Port Config Register: 0x8800
+        - PTP Port Config Register: 0x8801
+        - PTP Port Config Register: 0x8802
+        - PTP Port Config Register: 0x8803
+        - PTP Port Status Register: 0x8808
+        - PTP Port Status Register: 0x8809
+        - PTP Port Status Register: 0x880A
+        - PTP Port Status Register: 0x880B
+        - PTP Port Status Register: 0x880C
+        - PTP Port Status Register: 0x881D
+        - PTP Port Status Register: 0x881E
+        - PTP Port Status Register: 0x880F
+        - PTP Port Status Register: 0x8900
+        - PTP Port Status Register: 0x8901
+        - PTP Port Status Register: 0x8902
+        - PTP Port Status Register: 0x8903
+        - Ingress Mean Path Delay Register: 0x890C
+        - Ingress Path Delay Asymmetry Register: 0x891D
+        - Egress Path Delay Asymmetry Register: 0x891E
+        - PTP Global Config Register: 0x8E00
+        - PTP Global Config Register: 0x8E01
+        - PTP Global Config Register: 0x8E02
+        - PTP Status Register: 0x8E08
+        - ReadPlus Command Register: 0x8E1E
+        - ReadPlus Data Register: 0x8E1F
+        - PTP Global Time Array Register: 0x8F00
+        - TAI Global Time Array Register: 0x8F01
+        - PTP Global Time Array Register: 0x8F02
+        - PTP Global Time Array Register: 0x8F03
+        - PTP Global Time Array Register: 0x8F04
+        - PTP Global Time Array Register: 0x8F05
+        - PTP Global Time Array Register: 0x8F06
+        - PTP Global Time Array Register: 0x8F07
+        - PTP Global Time Array Register: 0x8F08
+        - PTP Global Time Array Register: 0x8F09
+        - PTP Global Time Array Register: 0x8F0A
+        - PTP Global Time Array Register: 0x8F0B
+        - PTP Global Time Array Register: 0x8F0C
+        - PTP Global Time Array Register: 0x8F1D
+        - PTP Global Time Array Register: 0x8F1E
+        - TAI Global Config Register: 0x8C00
+        - TAI Global Config Register: 0x8C01
+        - TAI Global Config Register: 0x8C02
+        - TAI Global Config Register: 0x8C03
+        - TAI Global Config Register: 0x8C04
+        - TAI Global Config Register: 0x8C05
+        - TAI Global Status Register: 0x8D00
+        - TAI Global Status Register: 0x8D01
+        - TAI Global Status Register: 0x8D02
+        - TAI Global Status Register: 0x8C1E
+        - TAI Global Status Register: 0x8C0F
+        - TAI Global Config Register: 0x8C09
+        - TAI Global Config Register: 0x8C0A
+        - TAI Global Config Register: 0x8C0B
+        - TAI Global Config Register: 0x8D1E

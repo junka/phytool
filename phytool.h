@@ -17,6 +17,11 @@
 #ifndef __PHYTOOL_H
 #define __PHYTOOL_H
 
+#include <stdint.h>
+#include <net/if.h>
+#include <linux/ethtool.h>
+#include <linux/mdio.h>
+
 #define INDENT 3
 
 #define REG_SUMMARY 0xffff
@@ -26,6 +31,40 @@ struct loc {
 	uint16_t phy_id;
 	uint16_t reg;
 };
+
+
+struct num_list {
+    int *numbers;
+    int count;
+};
+
+struct reg_field {
+    char *field;
+    struct num_list offset;
+};
+
+struct reg {
+    char *name;
+    uint32_t addr;
+    uint16_t reset;
+    int num_field;
+    struct reg_field fields[16];
+};
+
+struct regcls {
+    char *name;
+    int dev;
+    int num_reg;
+    struct reg* regs;
+};
+
+struct phy_desc {
+    char *name;
+    char *manufactory;
+    int num_cls;
+    struct regcls *regcls;
+};
+
 
 static inline int loc_is_c45(const struct loc *loc)
 {
@@ -49,6 +88,9 @@ uint32_t phy_id   (const struct loc *loc);
 void print_attr_name(const char *name, int indent);
 void print_bool(const char *name, int on);
 
-int print_phytool(const struct loc *loc, int indent);
+int print_phytool(struct loc *loc, const char *descfile);
+
+struct phy_desc* read_phy_yaml(const char *filename);
+void free_phydesc(struct phy_desc*);
 
 #endif	/* __PHYTOOL_H */
