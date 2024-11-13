@@ -26,13 +26,10 @@
 
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <net/if.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <linux/ethtool.h>
-#include <linux/mdio.h>
 #include <linux/sockios.h>
 
 #include "phytool.h"
@@ -43,7 +40,7 @@ struct applet {
 	const char *name;
 	int (*usage)(int code);
 	int (*parse_loc)(char *text, struct loc *loc, int strict);
-	int (*print)(const struct loc *loc, int indent);
+	int (*print)(struct loc *loc, const char *descfile);
 };
 
 
@@ -135,6 +132,7 @@ static int get_phyad(const char *name)
 
 	err = ioctl(sd, SIOCETHTOOL, &ifr);
 	if (err < 0) {
+		printf("unable to ioctl for %s\n", name);
 		close(sd);
 		return err;
 	}
@@ -275,7 +273,32 @@ static int phytool_print(struct applet *a, int argc, char **argv)
 		return 1;
 	}
 
-	err = a->print(&loc, 0);
+	err = a->print(&loc, NULL);
+	if (err)
+		return 1;
+	
+	return 0;
+}
+
+
+static int phytool_dump(struct applet *a, int argc, char **argv)
+{
+	struct loc loc;
+	int pad;
+	int err;
+
+	if (argc < 2)
+		return 1;
+
+	strcpy(loc.ifnam, argv[0]);
+	pad = get_phyad(argv[0]);
+	if (pad < 0) {
+		return 1;
+	}
+
+	loc.phy_id = pad;
+
+	err = a->print(&loc, argv[1]);
 	if (err)
 		return 1;
 	
@@ -287,6 +310,7 @@ static int phytool_usage(int code)
 	printf("Usage: %s read  IFACE/[MMD.]REG\n"
 	       "       %s write IFACE/[MMD.]REG <0-0xffff>\n"
 	       "       %s print IFACE/[[MMD.]REG]\n"
+	       "       %s dump  IFACE path/to/phy_desc_yaml\n"
 	       "\n"
 	       "Clause 22:\n"
 	       "\n"
@@ -309,7 +333,7 @@ static int phytool_usage(int code)
 	       "\n"
 	       "Bug report address: https://github.com/junka/phytool/issues\n"
 	       "\n",
-	       __progname, __progname, __progname, __progname, __progname, __progname);
+	       __progname, __progname, __progname, __progname, __progname, __progname, __progname);
 	return code;
 }
 
@@ -345,8 +369,8 @@ int main(int argc, char **argv)
 		return phytool_write(a, argc - 2, &argv[2]);
 	else if (!strcmp(argv[1], "print"))
 		return phytool_print(a, argc - 2, &argv[2]);
-	else
-		return phytool_print(a, argc - 1, &argv[1]);
+	else if (!strcmp(argv[1], "dump"))
+		return phytool_dump(a, argc - 2, &argv[2]);
 
 	fprintf(stderr, "error: unknown command \"%s\"\n", argv[1]);
 	return a->usage(1);

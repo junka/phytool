@@ -9,20 +9,21 @@ PKG     = $(NAME)-$(VERSION)
 ARCHIVE = $(PKG).tar.xz
 
 PREFIX ?= /usr/local/
-CFLAGS ?= -Wall -Wextra -Werror
-LDLIBS  = 
+CFLAGS ?= -Wall -Wextra -Werror -g
+LDFLAGS ?= -fPIC -L/usr/local/lib
+LDLIBS  = -lyaml
 MANDIR ?= $(PREFIX)/share/man
 
 objs = $(patsubst %.c, %.o, $(wildcard *.c))
 hdrs = $(wildcard *.h)
 
 %.o: %.c $(hdrs) Makefile
-	@printf "  CC      $(subst $(ROOTDIR)/,,$(shell pwd)/$@)\n"
+	@printf "  CC        $(subst $(ROOTDIR)/,,$(shell pwd)/$@)\n"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 phytool: $(objs)
-	@printf "  CC      $(subst $(ROOTDIR)/,,$(shell pwd)/$@)\n"
-	@$(CC) $(LDFLAGS) $(LDLIBS) -o $@ $^
+	@printf "  LINK      $(subst $(ROOTDIR)/,,$(shell pwd)/$@)\n"
+	@$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 all: phytool
 

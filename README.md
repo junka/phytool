@@ -11,6 +11,7 @@ Unlike the original one, PHYAD was automatically filled, So read C22 register or
     phytool read  IFACE/[MMD.]REG
     phytool write IFACE/[MMD.]REG <0-0xffff>
     phytool print IFACE/[[MMD.]REG]
+    phytool dump  IFACE path/to/desc_file
 
     Clause 22:
 
