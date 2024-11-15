@@ -36,13 +36,6 @@
 
 extern char *__progname;
 
-struct applet {
-	const char *name;
-	int (*usage)(int code);
-	int (*parse_loc)(char *text, struct loc *loc, int strict);
-	int (*print)(struct loc *loc, const char *descfile);
-};
-
 
 static int __phy_op(const struct loc *loc, uint16_t *val, int cmd)
 {
@@ -216,7 +209,7 @@ static int phytool_parse_loc(char *text, struct loc *loc, int strict)
 	return phytool_parse_loc_segs(dev, reg, loc);
 }
 
-static int phytool_read(struct applet *a, int argc, char **argv)
+static int phytool_read(int argc, char **argv)
 {
 	struct loc loc;
 	int val;
@@ -224,7 +217,7 @@ static int phytool_read(struct applet *a, int argc, char **argv)
 	if (!argc)
 		return 1;
 
-	if (a->parse_loc(argv[0], &loc, 1)) {
+	if (phytool_parse_loc(argv[0], &loc, 1)) {
 		fprintf(stderr, "error: bad location format\n");
 		return 1;
 	}
@@ -237,7 +230,7 @@ static int phytool_read(struct applet *a, int argc, char **argv)
 	return 0;
 }
 
-static int phytool_write(struct applet *a, int argc, char **argv)
+static int phytool_write(int argc, char **argv)
 {
 	struct loc loc;
 	unsigned long val;
@@ -246,7 +239,7 @@ static int phytool_write(struct applet *a, int argc, char **argv)
 	if (argc < 2)
 		return 1;
 
-	if (a->parse_loc(argv[0], &loc, 1)) {
+	if (phytool_parse_loc(argv[0], &loc, 1)) {
 		fprintf(stderr, "error: bad location format\n");
 		return 1;
 	}
@@ -260,7 +253,7 @@ static int phytool_write(struct applet *a, int argc, char **argv)
 	return 0;
 }
 
-static int phytool_print(struct applet *a, int argc, char **argv)
+static int phytool_print(int argc, char **argv)
 {
 	struct loc loc;
 	int err;
@@ -268,12 +261,12 @@ static int phytool_print(struct applet *a, int argc, char **argv)
 	if (!argc)
 		return 1;
 
-	if (a->parse_loc(argv[0], &loc, 0)) {
+	if (phytool_parse_loc(argv[0], &loc, 0)) {
 		fprintf(stderr, "error: bad location format\n");
 		return 1;
 	}
 
-	err = a->print(&loc, NULL);
+	err = print_phytool(&loc, NULL);
 	if (err)
 		return 1;
 	
@@ -281,7 +274,7 @@ static int phytool_print(struct applet *a, int argc, char **argv)
 }
 
 
-static int phytool_dump(struct applet *a, int argc, char **argv)
+static int phytool_dump(int argc, char **argv)
 {
 	struct loc loc;
 	int pad;
@@ -298,7 +291,7 @@ static int phytool_dump(struct applet *a, int argc, char **argv)
 
 	loc.phy_id = pad;
 
-	err = a->print(&loc, argv[1]);
+	err = print_phytool(&loc, argv[1]);
 	if (err)
 		return 1;
 	
@@ -337,41 +330,35 @@ static int phytool_usage(int code)
 	return code;
 }
 
-static struct applet applets[] = {
-	{
-		.name = "phytool",
-		.usage = phytool_usage,
-		.parse_loc = phytool_parse_loc,
-		.print = print_phytool
-	},
-
-	{ .name = NULL }
-};
-
 int main(int argc, char **argv)
 {
-	struct applet *a;
-
-	for (a = applets; a->name; a++) {
-		if (!strcmp(__progname, a->name))
-			break;
-	}
-
-	if (!a->name)
-		a = applets;
-
+#if 0
+	struct phy_desc *phy = read_phy_yaml(argv[1]);
+    printf("\n%s, %s\n", phy->manufactory, phy->name);
+    printf("reg_cls num %d\n", phy->num_cls);
+    for (int i = 0; i < phy->num_cls; i++) {
+        printf("regs group %s, MMD %d\n", phy->regcls[i].name, phy->regcls[i].dev);
+        for (int j = 0; j < phy->regcls[i].num_reg; j++) {
+            printf("\t%s: 0x%04x\n", phy->regcls[i].regs[j].name, phy->regcls[i].regs[j].addr);
+			for (int k = 0; k < phy->regcls[i].regs[j].num_field; k++) {
+				printf("\t\t%s: %u\n", phy->regcls[i].regs[j].fields[k].field, num_list_value(&phy->regcls[i].regs[j].fields[k].offset, 0xfffe));
+			}
+		}
+    }
+	return 0;
+#endif
 	if (argc < 2)
-		return a->usage(1);
+		return phytool_usage(1);
 
 	if (!strcmp(argv[1], "read"))
-		return phytool_read(a, argc - 2, &argv[2]);
+		return phytool_read(argc - 2, &argv[2]);
 	else if (!strcmp(argv[1], "write"))
-		return phytool_write(a, argc - 2, &argv[2]);
+		return phytool_write(argc - 2, &argv[2]);
 	else if (!strcmp(argv[1], "print"))
-		return phytool_print(a, argc - 2, &argv[2]);
+		return phytool_print(argc - 2, &argv[2]);
 	else if (!strcmp(argv[1], "dump"))
-		return phytool_dump(a, argc - 2, &argv[2]);
+		return phytool_dump(argc - 2, &argv[2]);
 
 	fprintf(stderr, "error: unknown command \"%s\"\n", argv[1]);
-	return a->usage(1);
+	return phytool_usage(1);
 }

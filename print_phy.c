@@ -219,7 +219,11 @@ int print_phytool(struct loc *loc, const char *filename)
 				loc->phy_id = mdio_phy_id_c45(phyad, phy->regcls[i].dev);
 				for (int j = 0; j < phy->regcls[i].num_reg; j++) {
 					loc->reg = phy->regcls[i].regs[j].addr;
-					printf("0x%04x\t%60s\t0x%04x\n", phy->regcls[i].regs[j].addr, phy->regcls[i].regs[j].name, phy_read(loc));
+					int val = phy_read(loc);
+					printf("0x%04x\t%60s\t0x%04x\n", phy->regcls[i].regs[j].addr, phy->regcls[i].regs[j].name, val);
+					for (int k = 0; k < phy->regcls[i].regs[j].num_field; k++) {
+						printf("\t\t%s: %u\n", phy->regcls[i].regs[j].fields[k].field, num_list_value(&phy->regcls[i].regs[j].fields[k].offset, val));
+					}
 				}
 			}
 		}

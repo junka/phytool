@@ -90,6 +90,7 @@ void print_bool(const char *name, int on);
 
 int print_phytool(struct loc *loc, const char *descfile);
 
+uint32_t num_list_value(struct num_list *l, uint32_t val);
 struct phy_desc* read_phy_yaml(const char *filename);
 void free_phydesc(struct phy_desc*);
 

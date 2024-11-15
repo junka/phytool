@@ -12,30 +12,80 @@ Registers:
           PMA loopback: 0
         - PMA/PMD Device Identifier Register 1: 0x0002
         - PMA/PMD Device Identifier Register 2: 0x0003
-          OUI: 10-15
-          Model Number: 4-9
-          Revision Number: 0-3
+          OUI: 15:10
+          Model Number: 9:4
+          Revision Number: 3:0
         - PMA/PMD Speed Ability Register: 0x0004
+          10M Capable: 6
+          100M Capable: 5
+          1000M Capable: 4
+          10G Capable: 0
         - PMA/PMD Devices In Package Register 1: 0x0005
+          Auto-Negotiation Present: 7
+          DTS XS Present: 5
+          PHY XS Present: 4
+          PCS Present: 3
+          WIS Present: 2
+          PMD/PMA Present: 1
+          Clause 22 Registers Present: 0
         - PMA/PMD Devices In Package Register 2: 0x0006
         - PMA/PMD Package Identifier Register 1: 0x000E
         - PMA/PMD Package Identifier Register 2: 0x000F
         - BASE-T1 PMD/PMA Extended Ability Register: 0x0012
+          1000BASE-T1 Ability: 1
+          100BASE-T1 Ability: 0
         - BASE-T1 PMD/PMA Control Register: 0x0834
+          Master/Slave Config Value: 14
+          Type Selection: 3:0
         - 100BASE-T1 PMA/PMD Test Control Register: 0x0836
+          100BASE-T1 Test Mode Control: 15:13
         - BASE-T1 Control Register: 0x0900
+          Reset: 15
+          Global PMA Transmit Disable: 14
+          Low Power: 11
         - 1000BASE-T1 PMA Status Register: 0x0901
+          Receive Fault Ability: 9
+          Low Power Ability: 8
+          Received Polarity: 2
+          Receive Fault: 1
+          Receive Link Status: 0
         - 1000BASE-T1 Training Register: 0x0902
+          OAM Advertisement: 1
+          EEE Advertisement: 0
         - 1000BASE-T1 Link Partner Training Register: 0x0903
+          Link Partner User Field: 10:4
+          OAM Advertisement: 1
+          EEE Advertisement: 0
         - 1000Base-T1 Test Mode Control Register: 0x0904
+          Test Mode Control: 15:13
 
   - Common Control Registers:
       device: 3
       regmap:
         - Reset and Control Register: 0x8000
+          SGMII Software Reset: 15
+          SGMII Software Reset: 13
+          TX Disable Feature Enable: 3
         - Tx Disable Status Register: 0x8002
+          VDD09 Ready: 2
+          VDD03 Ready: 1
+          Status of Disable: 0
         - SyncE Control Register: 0x8004
+          SyncE Link Down Disable: 1
+          SyncE Clock Enable: 0
         - Interrupt Enable Register: 0x8010
+          PTP Interrupt Negative: 15
+          PTP Interrupt: 14
+          100BT1 Interrupt Neg Edge: 13
+          100BT1 Interrupt Enable: 12
+          Includes Interrupt for Temperature Sensor: 11
+          Pmt_link_dwn Interrupt Enable: 7
+          Pmt_link_up Interrupt Enable: 6
+          SGMII Interrupt Neg Enable: 5
+          NT Interrupt Enable: 4
+          LED 1 Interrupt Enable: 2
+          LED 0 Interrupt Enable: 1
+          GPIO 0 Interrupt Enable: 0
         - GPIO Interrupt Status Register: 0x8011
         - Temperature Sensor Register 2: 0x8041
         - Temperature Sensor Register 3: 0x8042
@@ -53,18 +103,38 @@ Registers:
       device: 3
       regmap:
         - PCS Control Register 1: 0x0000
+          Software Reset: 15
+          Loopback: 14
+          Speed Select: 6,13
+          Low Power: 11
         - PCS Status Register 1: 0x0001
+          Low Power Ability: 1
         - PCS Device Identifier Register 1: 0x0002
         - PCS Device Identifier Register 2: 0x0003
         - PCS Device In Package Register 1: 0x0005
         - PCS Device In Package Register 2: 0x0006
         - PCS Status Register 2: 0x0008
+          Device Present: 15:14
+          Transmit Fault: 11
+          Receive Fault: 10
         - PCS Package Identifier Register 1: 0x000E
         - PCS Package Identifier Register 2: 0x000F
         - 1000BASE-T1 PCS Status Register 2: 0x0021
+          Latched High Bit Error Rate: 14
+          Errored Blocks Counter: 7:0
         - PCS Control Register: 0x0900
+          Software Reset: 15
+          Loopback: 14
         - PCS 1000BASE-T1 Status Register 1: 0x0901
+          Fault: 7
+          Link Status: 2
         - PCS 1000BASE-T1 Status Register 2: 0x0902
+          Receive Link Status: 10
+          PCS High BER: 9
+          Block Lock: 8
+          Latched High BER: 7
+          Latched Block Lock: 6
+          BER Counter: 5:0
         - OAM Register 0: 0x0904
         - OAM Register 1: 0x0905
         - OAM Register 2: 0x0906

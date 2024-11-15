@@ -48,7 +48,7 @@ struct num_list parse_range(const char *range) {
     int start, end;
 
     start_str = strdup(range);
-    end_str = strchr(start_str, '-');
+    end_str = strchr(start_str, ':');
     if (end_str == NULL) {
         free(start_str);
         return list;
@@ -68,6 +68,16 @@ struct num_list parse_range(const char *range) {
     free(start_str);
     return list;
 }
+
+uint32_t num_list_value(struct num_list *l, uint32_t val) {
+    uint32_t ret = 0;
+    for (int inum = 0; inum < l->count; inum ++) {
+        ret <<= 1;
+        ret |= (((1 << l->numbers[inum]) & val) ? 1: 0);
+    }
+    return ret;
+}
+
 
 static struct num_list parse_input(const char *input) {
     struct num_list result = {NULL, 0};
@@ -421,16 +431,6 @@ struct phy_desc * read_phy_yaml(const char * filename) {
     yaml_parser_delete(&parser);
     fclose(fp);
 
-#if 0
-    printf("\n%s, %s\n", phy->manufactory, phy->name);
-    printf("regs num %d\n", phy->num);
-    for (int i = 0; i < phy->num; i++) {
-        printf("regs group %s, dev %d\n", phy->regs[i].name, phy->regs[i].dev);
-        for (int j = 0; j < phy->regs[i].num; j++) {
-            printf("%s: 0x%04x\n", phy->regs[i].map[j].name, phy->regs[i].map[j].addr);
-        }
-    }
-#endif
     return phy;
 
 error:
