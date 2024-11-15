@@ -1,0 +1,634 @@
+---
+Manufactory: Marvell
+Name: AQR405
+Registers:
+  - PMA/PMD registers:
+    device: 1
+    regmap:
+      - PMA Standard Control 1: 0x000
+        Reset: 15
+        Speed Selection: 6,13
+        Low Power: 11
+        10G Spedd Selection: 5:2
+        Loopback: 0
+      - PMA Standard Status 1: 0x0001
+        Fault: 7
+        PMA Receive Link Status: 2
+        Low Power Ability: 1
+      - PMA Standard Device Identifier 1: 0x0002
+      - PMA Standard Devuce Identifier 2: 0x0003
+      - PMA Standard Speed Ability: 0x0004
+        PMA 10M Capable: 6
+        PMA 100M Capable: 5
+        PMA 1G Capable: 4
+        10PASS-TS Capable: 2
+        2BASE-TL Capable: 1
+        PMA 10G Capable: 0
+      - PMA Standard Device in Package 1: 0x0005
+        Autonegotiation Present: 7
+        TC Present: 6
+        DTE XS Present: 5
+        PHY XS Present: 4
+        PCS Present: 3
+        WIS Present: 2
+        PMA Present: 1
+        Clause 22 Registers Present: 0
+      - PMA Standard Devices in Package 2: 0x0006
+        Vendor Specific Device 2 Present: 15
+        Vendor Specific Device 1 Present: 14
+        Clause 22 Extension Present: 13
+      - PMA Standard Control 2: 0x0007
+        PMA Device Type: 3:0
+      - PMA Standard Status 2: 0x0008
+        Device Present: 15:14
+        Transmit Fault Location Ability: 13
+        Receive Fault Location Ability: 12
+        Transmit Fault: 11
+        Receive Fault: 10
+        Extended Abilities: 9
+        PMD Transmit Disable Ability: 8
+        PMA 10GBASE-SR Capable: 7
+        PMA 10GBASE-LR Capable: 6
+        PMA 10GBASE-ER Capable: 5
+        PMA 10GBASE-LX4 Capable: 4
+        PMA 10GBASE-SW Capable: 3
+        PMA 10GBASE-LW Capable: 2
+        PMA 10GBASE-EW Capable: 1
+        PMA Loopback Ability: 0
+      - PMD Standard Transmit Disable Control: 0x0009
+        PMD Channel 3 Transmit Disable: 4
+        PMD Channel 2 Transmit Disable: 3
+        PMD Channel 1 Transmit Disable: 2
+        PMD Channel 0 Transmit Disable: 1
+        PMD Global Transmit Disable: 0
+      - PMD Standard Signal Detect: 0x000A
+        PMD Channel 3 Signal Detect: 4
+        PMD Channel 2 Signal Detect: 3
+        PMD Channel 1 Signal Detect: 2
+        PMD Channel 0 Signal Detect: 1
+        PMD Global Signal Detect: 0
+      - PMD Standard 10G Extended Ability Register: 0x000B
+        PMA 10BASE-T Capable: 8
+        PMA 100BASE-TX Capable: 7
+        PMA 1000BASE-KX Capable: 6
+        PMA 1000BASE-T Capable: 5
+        PMA 10GBASE-KR Capable: 4
+        PMA 10GBASE-KX4 Capable: 3
+        PMA 10GBASE-T Capable: 2
+        PMA 10GBASE-LRM Capable: 1
+        PMA 10GBASE-CX4 Capable: 0
+      - PMA Standard Package Identifier 1: 0x000E
+      - PMA Standard Package Identifier 2: 0x000F
+      - PMA 10GBASE-T Status: 0x0081
+        Link Partner Information Valid: 0
+      - PMA 10GBASE-T Pair Swap and Polarity Status: 0x0082
+        Pair Polarity: 11:8
+        MDI / MD-X Connection State: 1:0
+      - PMA 10GBASE-T Tx Power Backoff and Short Reach Setting: 0x0083
+        Link Partner Tx Power Backoff: 15:13
+        Tx Power Backoff: 12:10
+        Short Reach Mode: 0
+      - PMA 10GBASE-T Test Modes:
+        Test Mode Control: 15:13
+        Transmitter Test Frequencies: 12:10
+      - PMA 10GBASE-T SNR Operating Margin Channel A: 0x0085
+      - PMA 10GBASE-T SNR Operating Margin Channel B: 0x0086
+      - PMA 10GBASE-T SNR Operating Margin Channel C: 0x0087
+      - PMA 10GBASE-T SNR Operating Margin Channel D: 0x0088
+      - PMA 10GBASE-T SNR Minimum Operating Margin Channel A: 0x0089
+      - PMA 10GBASE-T SNR Minimum Operating Margin Channel B: 0x008A
+      - PMA 10GBASE-T SNR Minimum Operating Margin Channel C: 0x008B
+      - PMA 10GBASE-T SNR Minimum Operating Margin Channel D: 0x008C
+      - PMA 10GBASE-T Receive Signal Power Channel A: 0x008D
+      - PMA 10GBASE-T Receive Signal Power Channel B: 0x008E
+      - PMA 10GBASE-T Receive Signal Power Channel C: 0x008F
+      - PMA 10GBASE-T Receive Signal Power Channel D: 0x0090
+      - PMA 10GBASE-T Skew Delay 1: 0x0091
+        Skew Delay B: 14:8
+      - PMA 10GBASE-T Skew Delay 2: 0x0092
+        Skew Delay D: 14:8
+        Skew Delay C: 6:0
+      - PMA 10GBASE-T Fast Retrain Status and Control: 0x0093
+        LP Fast Retrain Count: 15:11
+        LD Fast Retrain Count: 10:6
+        Fast Retrain Ability: 4
+        Fast Retrain Negotiated: 3
+        Fast Retrain Signal Type: 2:1
+        Fast Retrain Enable: 0
+      - TimeSync PMA Capability: 0x1800
+        TimeSync Transmit Path Data Delay: 1
+        TimeSync Receive Path Data Delay: 0
+      - TimeSync PMA Transmit Path Data Delay 1: 0x1801
+      - TimeSync PMA Transmit Path Data Delay 2: 0x1802
+      - TimeSync PMA Transmit Path Data Delay 3: 0x1803
+      - TimeSync PMA Transmit Path Data Delay 4: 0x1804
+      - TimeSync PMA Receive Path Data Delay 1: 0x1805
+      - TimeSync PMA Receive Path Data Delay 2: 0x1806
+      - TimeSync PMA Receive Path Data Delay 3: 0x1807
+      - TimeSync PMA Receive Path Data Delay 4: 0x1808
+      - XENPAK Control: 0x8000
+        Command: 5
+        Command Status: 3:2
+        Extended Commands: 1:0
+      - XENPAK Header - XENPAK MSA Version Supported: 0x807
+      - XENPAK Header - NVR Size 1: 0x8008
+      - XENPAK Header - NVR Size 2: 0x8009
+      - XENPAK Header - Memory Used 1: 0x800A
+      - XENPAK Header - Memory Used 2: 0x800B
+      - XENPAK Header - Basic Memory Start Address: 0x800C
+      - XENPAK Header - Customer Memory Offset: 0x800D
+      - XENPAK Header - Vendor Memory Start Address: 0x800E
+      - XENPAK Header - Extended Vendor Memory Offset 1: 0x800F
+      - XENPAK Header - Extended Vendor Memory Offset 2: 0x8010
+      - XENPAK Basic - Reserved 0x11: 0x8011
+      - XENPAK Basic - Transceiver Type: 0x8012
+      - XENPAK Basic - Connector Type: 0x8013
+      - XENPAK Basic - Encoding: 0x8014
+      - XENPAK Basic - Bit Rate 0: 0x8015
+      - XENPAK Basic - Bit Rate 1: 0x8016
+      - XENPAK Basic - Protocol: 0x8017
+      - XENPAK Basic - Standards Compliance Codes: 0x8018
+      - XENPAK Basic - Reserved 0x19 1: 0x8019
+      - XENPAK Basic - Reserved 0x19 2: 0x801A
+      - XENPAK Basic - Reserved 0x19 3: 0x801B
+      - XENPAK Basic - Reserved 0x19 4: 0x801C
+      - XENPAK Basic - Reserved 0x19 5: 0x801D
+      - XENPAK Basic - Reserved 0x19 6: 0x801E
+      - XENPAK Basic - Reserved 0x19 7: 0x801F
+      - XENPAK Basic - Reserved 0x19 8: 0x8020
+      - XENPAK Basic - Reserved 0x19 9: 0x8021
+      - XENPAK Basic - Reserved 0x19 10: 0x8022
+      - XENPAK Basic - Reserved 0x19 11: 0x8023
+      - XENPAK Basic - Reserved 0x19 12: 0x8024
+      - XENPAK Basic - Reserved 0x19 13: 0x8025
+      - XENPAK Basic - Reserved 0x19 14: 0x8026
+      - XENPAK Basic - Reserved 0x19 15: 0x8027
+      - XENPAK Basic - Reserved 0x19 16: 0x8028
+      - XENPAK Basic - Reserved 0x19 17: 0x8029
+      - XENPAK Basic - Reserved 0x19 18: 0x802A
+      - XENPAK Basic - Reserved 0x19 19: 0x802B
+      - XENPAK Basic - Reserved 0x19 20: 0x802C
+      - XENPAK Basic - Reserved 0x19 21: 0x802D
+      - XENPAK Basic - Reserved 0x19 22: 0x802E
+      - XENPAK Basic - Reserved 0x19 23: 0x802F
+      - XENPAK Basic - Reserved 0x19 24: 0x8030
+      - XENPAK Basic - Reserved 0x19 25: 0x8031
+      - XENPAK Basic - Package Identifier 1: 0x8032
+      - XENPAK Basic - Package Identifier 2: 0x8033
+      - XENPAK Basic - Package Identifier 3: 0x8034
+      - XENPAK Basic - Package Identifier 4: 0x8035
+      - XENPAK Basic - Vendor Identifier 1: 0x8036
+      - XENPAK Basic - Vendor Identifier 2: 0x8037
+      - XENPAK Basic - Vendor Identifier 3: 0x8038
+      - XENPAK Basic - Vendor Identifier 4: 0x8039
+      - XENPAK Basic - Vendor Name 1: 0x803A
+      - XENPAK Basic - Vendor Name 2: 0x803B
+      - XENPAK Basic - Vendor Name 3: 0x803C
+      - XENPAK Basic - Vendor Name 4: 0x803D
+      - XENPAK Basic - Vendor Name 5: 0x803E
+      - XENPAK Basic - Vendor Name 6: 0x803F
+      - XENPAK Basic - Vendor Name 7: 0x8040
+      - XENPAK Basic - Vendor Name 8: 0x8041
+      - XENPAK Basic - Vendor Name 9: 0x8042
+      - XENPAK Basic - Vendor Name 10: 0x8043
+      - XENPAK Basic - Vendor Name 11: 0x8044
+      - XENPAK Basic - Vendor Name 12: 0x8045
+      - XENPAK Basic - Vendor Name 13: 0x8046
+      - XENPAK Basic - Vendor Name 14: 0x8047
+      - XENPAK Basic - Vendor Name 15: 0x8048
+      - XENPAK Basic - Vendor Name 16: 0x8049
+      - XENPAK Basic - Vendor Part Number 1: 0x804A
+      - XENPAK Basic - Vendor Part Number 2: 0x804B
+      - XENPAK Basic - Vendor Part Number 3: 0x804C
+      - XENPAK Basic - Vendor Part Number 4: 0x804D
+      - XENPAK Basic - Vendor Part Number 5: 0x804E
+      - XENPAK Basic - Vendor Part Number 6: 0x804F
+      - XENPAK Basic - Vendor Part Number 7: 0x8050
+      - XENPAK Basic - Vendor Part Number 8: 0x8051
+      - XENPAK Basic - Vendor Part Number 9: 0x8052
+      - XENPAK Basic - Vendor Part Number 10: 0x8053
+      - XENPAK Basic - Vendor Part Number 11: 0x8054
+      - XENPAK Basic - Vendor Part Number 12: 0x8055
+      - XENPAK Basic - Vendor Part Number 13: 0x8056
+      - XENPAK Basic - Vendor Part Number 14: 0x8057
+      - XENPAK Basic - Vendor Part Number 15: 0x8058
+      - XENPAK Basic - Vendor Part Number 16: 0x8059
+      - XENPAK Basic - Vendor Part Revision Number 1: 0x805A
+      - XENPAK Basic - Vendor Part Revision Number 2: 0x805B
+      - XENPAK Basic - Vendor Serial Number 1: 0x805C
+      - XENPAK Basic - Vendor Serial Number 2: 0x805D
+      - XENPAK Basic - Vendor Serial Number 3: 0x805E
+      - XENPAK Basic - Vendor Serial Number 4: 0x805F
+      - XENPAK Basic - Vendor Serial Number 5: 0x8060
+      - XENPAK Basic - Vendor Serial Number 6: 0x8061
+      - XENPAK Basic - Vendor Serial Number 7: 0x8062
+      - XENPAK Basic - Vendor Serial Number 8: 0x8063
+      - XENPAK Basic - Vendor Serial Number 9: 0x8064
+      - XENPAK Basic - Vendor Serial Number 10: 0x8065
+      - XENPAK Basic - Vendor Serial Number 11: 0x8066
+      - XENPAK Basic - Vendor Serial Number 12: 0x8067
+      - XENPAK Basic - Vendor Serial Number 13: 0x8068
+      - XENPAK Basic - Vendor Serial Number 14: 0x8069
+      - XENPAK Basic - Vendor Serial Number 15: 0x806A
+      - XENPAK Basic - Vendor Serial Number 16: 0x806B
+      - XENPAK Basic - Vendor Date Code 1: 0x806C
+      - XENPAK Basic - Vendor Date Code 2: 0x806D
+      - XENPAK Basic - Vendor Date Code 3: 0x806E
+      - XENPAK Basic - Vendor Date Code 4: 0x806F
+      - XENPAK Basic - Vendor Date Code 5: 0x8070
+      - XENPAK Basic - Vendor Date Code 6: 0x8071
+      - XENPAK Basic - Vendor Date Code 7: 0x8072
+      - XENPAK Basic - Vendor Date Code 8: 0x8073
+      - XENPAK Basic - Vendor Date Code 9: 0x8074
+      - XENPAK Basic - Vendor Date Code 10: 0x8075
+      - XENPAK Basic - 5V Loading: 0x8076
+      - XENPAK Basic - 3.3V Loading: 0x8077
+      - XENPAK Basic - APS Loading: 0x8078
+      - XENPAK Basic - APS Voltage: 0x8079
+      - XENPAK Basic - DOM Capability: 0x807A
+      - XENPAK Basic - Low-Power Startup Capability: 0x807B
+      - XENPAK Basic - Reserved 0x7C: 0x807C
+      - XENPAK Basic - Checksum: 0x807D
+      - XENPAK Customer - Reserved 0x7E 1: 0x807E
+      - XENPAK Customer - Reserved 0x7E 2: 0x807F
+      - XENPAK Customer - Reserved 0x7E 3: 0x8080
+      - XENPAK Customer - Reserved 0x7E 4: 0x8081
+      - XENPAK Customer - Reserved 0x7E 5: 0x8082
+      - XENPAK Customer - Reserved 0x7E 6: 0x8083
+      - XENPAK Customer - Reserved 0x7E 7: 0x8084
+      - XENPAK Customer - Reserved 0x7E 8: 0x8085
+      - XENPAK Customer - Reserved 0x7E 9: 0x8086
+      - XENPAK Customer - Reserved 0x7E 10: 0x8087
+      - XENPAK Customer - Reserved 0x7E 11: 0x8088
+      - XENPAK Customer - Reserved 0x7E 12: 0x8089
+      - XENPAK Customer - Reserved 0x7E 13: 0x808A
+      - XENPAK Customer - Reserved 0x7E 14: 0x808B
+      - XENPAK Customer - Reserved 0x7E 15: 0x808C
+      - XENPAK Customer - Reserved 0x7E 16: 0x808D
+      - XENPAK Customer - Reserved 0x7E 17: 0x808E
+      - XENPAK Customer - Reserved 0x7E 18: 0x808F
+      - XENPAK Customer - Reserved 0x7E 19: 0x8090
+      - XENPAK Customer - Reserved 0x7E 20: 0x8091
+      - XENPAK Customer - Reserved 0x7E 21: 0x8092
+      - XENPAK Customer - Reserved 0x7E 22: 0x8093
+      - XENPAK Customer - Reserved 0x7E 23: 0x8094
+      - XENPAK Customer - Reserved 0x7E 24: 0x8095
+      - XENPAK Customer - Reserved 0x7E 25: 0x8096
+      - XENPAK Customer - Reserved 0x7E 26: 0x8097
+      - XENPAK Customer - Reserved 0x7E 27: 0x8098
+      - XENPAK Customer - Reserved 0x7E 28: 0x8099
+      - XENPAK Customer - Reserved 0x7E 29: 0x809A
+      - XENPAK Customer - Reserved 0x7E 30: 0x809B
+      - XENPAK Customer - Reserved 0x7E 31: 0x809C
+      - XENPAK Customer - Reserved 0x7E 32: 0x809D
+      - XENPAK Customer - Reserved 0x7E 33: 0x809E
+      - XENPAK Customer - Reserved 0x7E 34: 0x809F
+      - XENPAK Customer - Reserved 0x7E 35: 0x80A0
+      - XENPAK Customer - Reserved 0x7E 36: 0x80A1
+      - XENPAK Customer - Reserved 0x7E 37: 0x80A2
+      - XENPAK Customer - Reserved 0x7E 38: 0x80A3
+      - XENPAK Customer - Reserved 0x7E 39: 0x80A4
+      - XENPAK Customer - Reserved 0x7E 40: 0x80A5
+      - XENPAK Customer - Reserved 0x7E 41: 0x80A6
+      - XENPAK Customer - Reserved 0x7E 42: 0x80A7
+      - XENPAK Customer - Reserved 0x7E 43: 0x80A8
+      - XENPAK Customer - Reserved 0x7E 44: 0x80A9
+      - XENPAK Customer - Reserved 0x7E 45: 0x80AA
+      - XENPAK Customer - Reserved 0x7E 46: 0x80AB
+      - XENPAK Customer - Reserved 0x7E 47: 0x80AC
+      - XENPAK Customer - Reserved 0x7E 48: 0x80AD
+      - XENPAK Vendor - Reserved 0xAE 1: 0x80AE
+      - XENPAK Vendor - Reserved 0xAE 2: 0x80AF
+      - XENPAK Vendor - Reserved 0xAE 3: 0x80B0
+      - XENPAK Vendor - Reserved 0xAE 4: 0x80B1
+      - XENPAK Vendor - Reserved 0xAE 5: 0x80B2
+      - XENPAK Vendor - Reserved 0xAE 6: 0x80B3
+      - XENPAK Vendor - Reserved 0xAE 7: 0x80B4
+      - XENPAK Vendor - Reserved 0xAE 8: 0x80B5
+      - XENPAK Vendor - Reserved 0xAE 9: 0x80B6
+      - XENPAK Vendor - Reserved 0xAE 10: 0x80B7
+      - XENPAK Vendor - Reserved 0xAE 11: 0x80B8
+      - XENPAK Vendor - Reserved 0xAE 12: 0x80B9
+      - XENPAK Vendor - Reserved 0xAE 13: 0x80BA
+      - XENPAK Vendor - Reserved 0xAE 14: 0x80BB
+      - XENPAK Vendor - Reserved 0xAE 15: 0x80BC
+      - XENPAK Vendor - Reserved 0xAE 16: 0x80BD
+      - XENPAK Vendor - Reserved 0xAE 17: 0x80BE
+      - XENPAK Vendor - Reserved 0xAE 18: 0x80BF
+      - XENPAK Vendor - Reserved 0xAE 19: 0x80C0
+      - XENPAK Vendor - Reserved 0xAE 20: 0x80C1
+      - XENPAK Vendor - Reserved 0xAE 21: 0x80C2
+      - XENPAK Vendor - Reserved 0xAE 22: 0x80C3
+      - XENPAK Vendor - Reserved 0xAE 23: 0x80C4
+      - XENPAK Vendor - Reserved 0xAE 24: 0x80C5
+      - XENPAK Vendor - Reserved 0xAE 25: 0x80C6
+      - XENPAK Vendor - Reserved 0xAE 26: 0x80C7
+      - XENPAK Vendor - Reserved 0xAE 27: 0x80C8
+      - XENPAK Vendor - Reserved 0xAE 28: 0x80C9
+      - XENPAK Vendor - Reserved 0xAE 29: 0x80CA
+      - XENPAK Vendor - Reserved 0xAE 30: 0x80CB
+      - XENPAK Vendor - Reserved 0xAE 31: 0x80CC
+      - XENPAK Vendor - Reserved 0xAE 32: 0x80CD
+      - XENPAK Vendor - Reserved 0xAE 33: 0x80CE
+      - XENPAK Vendor - Reserved 0xAE 34: 0x80CF
+      - XENPAK Vendor - Reserved 0xAE 35: 0x80D0
+      - XENPAK Vendor - Reserved 0xAE 36: 0x80D1
+      - XENPAK Vendor - Reserved 0xAE 37: 0x80D2
+      - XENPAK Vendor - Reserved 0xAE 38: 0x80D3
+      - XENPAK Vendor - Reserved 0xAE 39: 0x80D4
+      - XENPAK Vendor - Reserved 0xAE 40: 0x80D5
+      - XENPAK Vendor - Reserved 0xAE 41: 0x80D6
+      - XENPAK Vendor - Reserved 0xAE 42: 0x80D7
+      - XENPAK Vendor - Reserved 0xAE 43: 0x80D8
+      - XENPAK Vendor - Reserved 0xAE 44: 0x80D9
+      - XENPAK Vendor - Reserved 0xAE 45: 0x80DA
+      - XENPAK Vendor - Reserved 0xAE 46: 0x80DB
+      - XENPAK Vendor - Reserved 0xAE 47: 0x80DC
+      - XENPAK Vendor - Reserved 0xAE 48: 0x80DD
+      - XENPAK Vendor - Reserved 0xAE 49: 0x80DE
+      - XENPAK Vendor - Reserved 0xAE 50: 0x80DF
+      - XENPAK Vendor - Reserved 0xAE 51: 0x80E0
+      - XENPAK Vendor - Reserved 0xAE 52: 0x80E1
+      - XENPAK Vendor - Reserved 0xAE 53: 0x80E2
+      - XENPAK Vendor - Reserved 0xAE 54: 0x80E3
+      - XENPAK Vendor - Reserved 0xAE 55: 0x80E4
+      - XENPAK Vendor - Reserved 0xAE 56: 0x80E5
+      - XENPAK Vendor - Reserved 0xAE 57: 0x80E6
+      - XENPAK Vendor - Reserved 0xAE 58: 0x80E7
+      - XENPAK Vendor - Reserved 0xAE 59: 0x80E8
+      - XENPAK Vendor - Reserved 0xAE 60: 0x80E9
+      - XENPAK Vendor - Reserved 0xAE 61: 0x80EA
+      - XENPAK Vendor - Reserved 0xAE 62: 0x80EB
+      - XENPAK Vendor - Reserved 0xAE 63: 0x80EC
+      - XENPAK Vendor - Reserved 0xAE 64: 0x80ED
+      - XENPAK Vendor - Reserved 0xAE 65: 0x80EE
+      - XENPAK Vendor - Reserved 0xAE 66: 0x80EF
+      - XENPAK Vendor - Reserved 0xAE 67: 0x80F0
+      - XENPAK Vendor - Reserved 0xAE 68: 0x80F1
+      - XENPAK Vendor - Reserved 0xAE 69: 0x80F2
+      - XENPAK Vendor - Reserved 0xAE 70: 0x80F3
+      - XENPAK Vendor - Reserved 0xAE 71: 0x80F4
+      - XENPAK Vendor - Reserved 0xAE 72: 0x80F5
+      - XENPAK Vendor - Reserved 0xAE 73: 0x80F6
+      - XENPAK Vendor - Reserved 0xAE 74: 0x80F7
+      - XENPAK Vendor - Reserved 0xAE 75: 0x80F8
+      - XENPAK Vendor - Reserved 0xAE 76: 0x80F9
+      - XENPAK Vendor - Reserved 0xAE 77: 0x80FA
+      - XENPAK Vendor - Reserved 0xAE 78: 0x80FB
+      - XENPAK Vendor - Reserved 0xAE 79: 0x80FC
+      - XENPAK Vendor - Reserved 0xAE 80: 0x80FD
+      - XENPAK Vendor - Reserved 0xAE 81: 0x80FE
+      - XENPAK Vendor - Reserved 0xAE 82: 0x80FF
+      - XENPAK Vendor - Reserved 0xAE 83: 0x8100
+      - XENPAK Vendor - Reserved 0xAE 84: 0x8101
+      - XENPAK Vendor - Reserved 0xAE 85: 0x8102
+      - XENPAK Vendor - Reserved 0xAE 86: 0x8103
+      - XENPAK Vendor - Reserved 0xAE 87: 0x8104
+      - XENPAK Vendor - Reserved 0xAE 88: 0x8105
+      - XENPAK Vendor - Reserved 0xAE 89: 0x8106
+      - XENPAK Rx_Alarm - Control: 0x9000
+      - XENPAK Tx_Alarm - Control: 0x9001
+      - XENPAK LASI - Control: 0x9002
+      - XENPAK Rx_Alarm - Status: 0x9003
+      - XENPAK Tx_Alarm - Status: 0x9004
+      - XENPAK LASI - Status: 0x9005
+      - XENPAK DOM - Tx Control: 0x9006
+      - XENPAK DOM - High Temperature Alarm Threshold LSW: 0xA000
+      - XENPAK DOM - High Temperature Alarm Threshold MSW: 0xA001
+      - XENPAK DOM - Low Temperature Alarm Threshold LSW: 0xA002
+      - XENPAK DOM - Low Temperature Alarm Threshold MSW: 0xA003
+      - XENPAK DOM - High Temperature Warning Threshold LSW: 0xA004
+      - XENPAK DOM - High Temperature Warning Threshold MSW: 0xA005
+      - XENPAK DOM - Low Temperature Warning Threshold LSW: 0xA006
+      - XENPAK DOM - Low Temperature Warning Threshold MSW: 0xA007
+      - XENPAK DOM - Temperature LSW: 0xA060
+      - XENPAK DOM - Temperature MSW: 0xA061
+      - XENPAK DOM - Status: 0xA06E
+      - XENPAK DOM - Capability: 0xA06F
+      - XENPAK DOM - Alarms 1: 0xA070
+      - XENPAK DOM - Alarms 2: 0xA071
+      - XENPAK DOM - Alarms 3: 0xA072
+      - XENPAK DOM - Alarms 4: 0xA073
+      - XENPAK DOM - Alarms 5: 0xA074
+      - XENPAK DOM - Control and Status<XENPAK DOM - Control & Status>: 0xA100
+      - PMA Transmit Reserved Vendor Provisioning 0: 0xC412
+      - PMA Transmit Reserved Vendor Provisioning 1: 0xC413
+      - PMA Transmit Vendor Alarms 1: 0xCC00
+      - PMA Transmit Vendor Alarms 2: 0xCC01
+      - PMA Transmit Vendor Alarms 3: 0xCC02
+      - PMA Transmit Standard Interrupt Mask 1: 0xD000
+      - PMA Transmit Standard Interrupt Mask 2: 0xD001
+      - PMA Transmit Vendor LASI Interrupt Mask 1: 0xD400
+      - PMA Transmit Vendor LASI Interrupt Mask 2: 0xD401
+      - PMA Transmit Vendor LASI Interrupt Mask 3: 0xD402
+      - PMA Transmit Vendor Debug 1: 0xD800
+      - PMA Receive Reserved Vendor Provisioning 1: 0xE400
+      - PMA Receive Vendor State 1: 0xE800
+      - PMA Receive Reserved Vendor State 1: 0xE810
+      - PMA Receive Reserved Vendor State 2: 0xE811
+      - PMA Vendor Global Interrupt Flags 1: 0xFC00
+
+  - PCS registers:
+    device: 3
+    regmap:
+      - PCS Standard Control 1: 0x0000
+        Reset: 15
+        Loopback: 14
+        Speed Selection: 6,13
+        Low Power: 11
+        Clock Stop Enable: 10
+        10G Speed Selection: 5:2
+      - PCS Standard Status 1: 0x0001
+        Tx LPI Received: 11
+        Rx LPI Received: 10
+        Tx LPI Indication: 9
+        Rx LPI Indication: 8
+        Fault: 7
+        Clock Stop Capable: 6
+        PCS Receive Link Status: 2
+        Low Power Ability: 1
+      - PCS Standard Device Identifier 1: 0x0002
+      - PCS Standard Device Identifier 2: 0x0003
+      - PCS Standard Speed Ability: 0x0004
+        10PASS-TS/2BASE-TL Capable: 1
+        10G Capable: 0
+      - PCS Standard Devices in Package 1: 0x0005
+      - PCS Standard Devices in Package 2:: 0x0006
+      - PCS Standard Control 2: 0x0007
+      - PCS Standard Status 2: 0x0008
+        Device Present: 15:14
+        Transmit Fault: 11
+        Receive Fault: 10
+        10GBASE-T capable: 3
+        10GBASE-W capable: 2
+        10GBASE-X capable: 1
+        10GBASE-R capable: 0
+      - PCS Standard Package Identifier 1: 0x000E
+      - PCS Standard Package Identifier 2: 0x000F
+      - PCS EEE Capability Register: 0x0014
+        10GBASE-KR EEE: 6
+        10GBASE-KX4 EEE: 5
+        1000BASE-KX EEE: 4
+        10GBASE-T EEE: 3
+        1000BASE-T EEE: 2
+        100BASE-TX EEE: 1
+      - PCS EEE Wake Error Counter: 0x0016
+      - PCS 10G Status 1: 0x0020
+      - PCS 10G Status 2: 0x0021
+      - PCS 10GBASE-R Test Pattern Seed A 1: 0x0022
+      - PCS 10GBASE-R Test Pattern Seed A 2: 0x0023
+      - PCS 10GBASE-R Test Pattern Seed A 3: 0x0024
+      - PCS 10GBASE-R Test Pattern Seed A 4: 0x0025
+      - PCS 10GBASE-R Test Pattern Seed B 1: 0x0026
+      - PCS 10GBASE-R Test Pattern Seed B 2: 0x0027
+      - PCS 10GBASE-R Test Pattern Seed B 3: 0x0028
+      - PCS 10GBASE-R Test Pattern Seed B 4: 0x0029
+      - PCS 10GBASE-R PCS Test-Pattern Control: 0x002A
+      - PCS 10GBASE-R PCS Test-Pattern Error Counter: 0x002B
+      - TimeSync PCS Capability: 0x1800
+      - TimeSync PCS Transmit Path Data Delay 1: 0x1801
+      - TimeSync PCS Transmit Path Data Delay 2: 0x1802
+      - TimeSync PCS Transmit Path Data Delay 3: 0x1803
+      - TimeSync PCS Transmit Path Data Delay 4: 0x1804
+      - TimeSync PCS Receive Path Data Delay 1: 0x1805
+      - TimeSync PCS Receive Path Data Delay 2: 0x1806
+      - TimeSync PCS Receive Path Data Delay 3: 0x1807
+      - TimeSync PCS Receive Path Data Delay 4: 0x1808
+      - PCS Transmit Vendor Provisioning 1: 0xC400
+      - PCS Transmit Vendor Provisioning 1: 0xC401
+      - PCS Transmit Reserved Vendor Provisioning 1: 0xC410
+      - PCS Transmit XFI Vendor Provisioning 1: 0xC455
+      - PCS Transmit XFI Vendor Provisioning 2: 0xC456
+      - PCS Transmit XFI Vendor Provisioning 3: 0xC457
+      - PCS Transmit XFI Vendor Provisioning 4: 0xC458
+      - PCS Transmit XFI Vendor Provisioning 5: 0xC459
+      - PCS Transmit XFI Vendor Provisioning 6: 0xC45A
+      - PCS Transmit XFI Vendor Provisioning 7: 0xC45B
+      - PCS Transmit XFI Vendor Provisioning 8: 0xC45C
+      - PCS Transmit XFI0 Vendor Provisioning 1: 0xC460
+      - PCS Transmit XFI0 Vendor Provisioning 2: 0xC461
+      - PCS Transmit XFI1 Vendor Provisioning 1: 0xC470
+      - PCS Transmit XFI1 Vendor Provisioning 2: 0xC471
+      - PCS USX0 Memory Control Register: 0xC4C0
+      - PCS USX0 Control Register 1: 0xC4C1
+      - PCS USX0 Local fault Control Register: 0xC4C2
+      - PCS USX0 MAC Local fault Control Register: 0xC4C3
+      - PCS USX0 Auto-Neg Control Register: 0xC4C4
+
+  - PHY XS registers:
+    device: 4
+    regmap:
+      - PHY XS Standard Control 1: 0x0000
+      - PHY XS Standard Status 1: 0x0001
+      - PHY XS Standard Device Identifier 1: 0x0002
+      - PHY XS Standard Device Identifier 2: 0x0003
+      - PHY XS Standard Speed Ability: 0x0004
+      - PHY XS Standard Devices in Package 1: 0x0005
+      - PHY XS Standard Devices in Package 2: 0x0006
+      - PHY XS Standard Status 2: 0x0008
+      - PHY XS Standard Package Identifier 1: 0x000E
+      - PHY XS Standard Package Identifier 2: 0x000F
+      - PHY XS EEE Capability Register: 0x0014
+      - PHY XS EEE Wake Error Counter: 0x0016
+      - PHY XS Standard XGXS Lane Status: 0x0018
+      - PHY XS Standard XGXS Test Control: 0x0019
+      - TimeSync PHY XS Capability: 0x1800
+      - TimeSync PHY XS Transmit Path Data Delay 1: 0x1801
+      - TimeSync PHY XS Transmit Path Data Delay 2: 0x1802
+      - TimeSync PHY XS Transmit Path Data Delay 3: 0x1803
+      - TimeSync PHY XS Transmit Path Data Delay 4: 0x1804
+      - TimeSync PHY XS Receive Path Data Delay 1: 0x1805
+      - TimeSync PHY XS Receive Path Data Delay 2: 0x1806
+      - TimeSync PHY XS Receive Path Data Delay 3: 0x1807
+      - TimeSync PHY XS Receive Path Data Delay 4: 0x1808
+      - PHY XS SERDES Configuration 1: 0xC180
+      - PHY XS SERDES Lane 0 Configuration 1: 0xC1C0
+      - PHY XS SERDES Lane 1 Configuration 1: 0xC1D0
+      - PHY XS SERDES Lane 2 Configuration 1: 0xC1E0
+      - PHY XS SERDES Lane 3 Configuration 1: 0xC1F0
+      - PHY XS SERDES LUT 256: 0xC200
+      - PHY XS Transmit (XAUI Rx) Reserved Vendor Provisioning 1: 0xC440
+      - PHY XS Transmit (XAUI Rx) Reserved Vendor Provisioning 2: 0xC441
+      - PHY XS Transmit (XAUI Rx) Reserved Vendor Provisioning 3: 0xC442
+      - PHY XS Transmit (XAUI Rx) Reserved Vendor Provisioning 4: 0xC443
+      - PHY XS Transmit (XAUI Rx) Reserved Vendor Provisioning 5: 0xC444
+      - PHY XS Transmit (XAUI Rx) Reserved Vendor Provisioning 6: 0xC445
+      - PHY XS Transmit (XAUI Rx) PCS Status 1: 0xC802
+      - PHY XS Transmit (XAUI Rx) PCS Status 2: 0xC803
+      - PHY XS Transmit (XAUI Rx) PCS Status 3: 0xC804
+      - PHY XS Transmit (XAUI Rx) PCS Status 4: 0xC805
+
+  - Auto-negotiation registers:
+    device: 7
+    regmap:
+      - Autonegotiation Standard Control 1: 0x0000
+      - Autonegotiation Standard Status 1: 0x0001
+      - Autonegotiation Standard Device Identifier 1: 0x0002
+      - Autonegotiation Standard Device Identifier 2: 0x0003
+      - Autonegotiation Standard Devices in Package 1: 0x0005
+      - Autonegotiation Standard Devices in Package 2: 0x0006
+      - Autonegotiation Standard Status 2: 0x0008
+      - Autonegotiation Standard Package Identifier 1: 0x000E
+      - Autonegotiation Standard Package Identifier 2: 0x000F
+      - Autonegotiation Advertisement Register: 0x0010
+      - Autonegotiation Link Partner Base Page Ability Register: 0x0013
+      - Autonegotiation Extended Next Page Transmit Register: 0x0016
+      - Autonegotiation Extended Next Page Unformatted Code Register 1: 0x0017
+      - Autonegotiation Extended Next Page Unformatted Code Register 2: 0x0018
+      - Autonegotiation Link Partner Extended Next Page Ability Register: 0x0019
+      - Autonegotiation Link Partner Extended Next Page Unformatted Code Register 1: 0x001A
+      - Autonegotiation Link Partner Extended Next Page Unformatted Code Register 2: 0x001B
+      - Autonegotiation 10GBASE-T Control Register: 0x0020
+      - Autonegotiation 10GBASE-T Status Register: 0x0021
+      - Autonegotiation EEE Advertisement Register: 0x003C
+      - Autonegotiation EEE Link Partner Ability Register: 0x003D
+      - KR0 Autonegotiation Control: 0xC200
+      - KR0 Autonegotiation Status: 0xC201
+      - KR0 Autonegotiation Advertisement Word 1: 0xC210
+      - KR0 Autonegotiation Advertisement Word 2: 0xC211
+      - KR0 Autonegotiation Advertisement Word 3: 0xC212
+      - KR0 Link Partner Autonegotiation Advertisement Word 1: 0xC213
+      - KR0 Link Partner Autonegotiation Advertisement Word 2: 0xC214
+      - KR0 Link Partner Autonegotiation Advertisement Word 3: 0xC215
+  - 100BASE-TX and 1000BASE-T registers:
+    device: 29
+    regmap:
+      - GbE Standard Device Identifier 1: 0x0002
+      - GbE Standard Device Identifier 2: 0x0003
+      - GbE Standard Devices in Package 1: 0x0005
+      - GbE Standard Devices in Package 2: 0x0006
+      - GbE Standard Status 2: 0x0008
+      - GbE Standard Package Identifier 1: 0x000E
+      - GbE Standard Package Identifier 2: 0x000F
+      - GbE PHY SGMII Test Control: 0xC282
+      - GbE PHY WoL Control 1: 0xC300
+      - GbE PHY WoL Control 2: 0xC301
+      - GbE PHY WoL Control 3: 0xC302
+      - GbE PHY WoL Control 4: 0xC303
+      - GbE PHY WoL Control 5: 0xC304
+      - GbE PHY WoL Control 6: 0xC305
+      - GbE PHY WoL Control 7: 0xC306
+      - GbE PHY WoL Control 8: 0xC307
+      - GbE PHY WoL Control 9: 0xC308
+      - GbE PHY WoL Control 10: 0xC309
+      - GbE PHY WoL Control 11: 0xC30A
+      - GbE PHY WoL Control 12: 0xC30B
+      - GbE PHY WoL Control 13: 0xC30C
+      - GbE PHY WoL Control 14: 0xC30D
+      - GbE PHY WoL Control 15: 0xC30E
+      - GbE PHY WoL Control 16: 0xC30F
+      - GbE PHY WoL Control 17: 0xC310
+      - GbE PHY WoL Control 18: 0xC311
+      - GbE PHY WoL Control 19: 0xC312
+      - GbE PHY WoL Control 20: 0xC313
+      - GbE PHY WoL Control 21: 0xC314
+
+  - Global registers:
+    device: 30
+    regmap:
+      - Global Standard Control 1: 0x0000
+      - Global Standard Device Identifier 1: 0x0002
+      - Global Standard Device Identifier 2: 0x0003
+      - Global Standard Devices in Package 1: 0x0005
+      - Global Standard Vendor Devices in Package 2: 0x0006
+      - Global Standard Status 2: 0x0008
