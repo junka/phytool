@@ -26,13 +26,6 @@
 
 #define REG_SUMMARY 0xffff
 
-struct loc {
-	char ifnam[IFNAMSIZ];
-	uint16_t phy_id;
-	uint16_t reg;
-};
-
-
 struct num_list {
     int *numbers;
     int count;
@@ -66,29 +59,26 @@ struct phy_desc {
 };
 
 
-static inline int loc_is_c45(const struct loc *loc)
+static inline int loc_is_c45(uint16_t phyid)
 {
-	return loc->phy_id & MDIO_PHY_ID_C45;
+	return phyid & MDIO_PHY_ID_C45;
 }
 
-static inline int loc_c45_dev(const struct loc *loc)
+static inline int loc_c45_dev(uint16_t phyid)
 {
-	return loc->phy_id & MDIO_PHY_ID_DEVAD;
+	return phyid & MDIO_PHY_ID_DEVAD;
 }
 
-static inline int loc_c45_port(const struct loc *loc)
+static inline int loc_c45_port(uint16_t phyid)
 {
-	return (loc->phy_id & MDIO_PHY_ID_PRTAD) >> 5;
+	return (phyid & MDIO_PHY_ID_PRTAD) >> 5;
 }
 
-int      phy_read (const struct loc *loc);
-int      phy_write(const struct loc *loc, uint16_t val);
-uint32_t phy_id   (const struct loc *loc);
+int      phy_read (const char *name, uint16_t phyid, uint16_t reg);
+int      phy_write(const char *name, uint16_t phyid, uint16_t reg, uint16_t val);
+uint32_t phy_identifier(const char *ifname, int phyid);
 
-void print_attr_name(const char *name, int indent);
-void print_bool(const char *name, int on);
-
-int print_phytool(struct loc *loc, const char *descfile);
+int print_phytool(const char *ifname, int phyid, const char *filename);
 
 uint32_t num_list_value(struct num_list *l, uint32_t val);
 struct phy_desc* read_phy_yaml(const char *filename);

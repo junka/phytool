@@ -8,11 +8,23 @@ NAME    = phytool
 PKG     = $(NAME)-$(VERSION)
 ARCHIVE = $(PKG).tar.xz
 
+SYS_ROOT=../recipe-sysroot
+CROSS_COMPILE=/usr/bin/aarch64-linux-gnu-
+CC=${CROSS_COMPILE}gcc
+CXX=$(CROSS_COMPILE)g++
+LD=${CROSS_COMPILE}ld
+AR=$(CROSS_COMPILE)ar
+ASAN_FLAGS=
+#-fsanitize=address -fno-omit-frame-pointer -fsanitize-recover=address -static-libasan
 PREFIX ?= /usr/local/
-CFLAGS ?= -Wall -Wextra -Werror -g
-LDFLAGS ?= -fPIC -L/usr/local/lib
+CFLAGS ?= -Wall -Wextra -Werror -g ${ASAN_FLAGS}
+LDFLAGS ?= -fPIC -L/usr/local/lib ${ASAN_FLAGS}
 LDLIBS  = -lyaml
 MANDIR ?= $(PREFIX)/share/man
+ifneq (${CROSS_COMPILE}, )
+	CFLAGS := ${CFLAGS} --sysroot=${SYS_ROOT}
+	LDFLAGS := ${LDFLAGS} --sysroot=${SYS_ROOT}
+endif
 
 objs = $(patsubst %.c, %.o, $(wildcard *.c))
 hdrs = $(wildcard *.h)
@@ -38,5 +50,3 @@ dist:
 
 install: phytool
 	@cp phytool $(DESTDIR)/$(PREFIX)/bin/
-	@mkdir -p $(DESTDIR)/$(MANDIR)/man8/
-	@cp -p phytool.8 -p $(DESTDIR)/$(MANDIR)/man8/

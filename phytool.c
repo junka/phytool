@@ -30,14 +30,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include <getopt.h>
+
 #include <linux/sockios.h>
 
 #include "phytool.h"
 
-extern char *__progname;
-
-
-static int __phy_op(const struct loc *loc, uint16_t *val, int cmd)
+static int __phy_op(const char *name, uint16_t phyid, uint16_t reg, uint16_t *val, int cmd)
 {
 	static int sd = -1;
 
@@ -51,10 +50,10 @@ static int __phy_op(const struct loc *loc, uint16_t *val, int cmd)
 	if (sd < 0)
 		return sd;
 
-	strncpy(ifr.ifr_name, loc->ifnam, sizeof(ifr.ifr_name));
+	strncpy(ifr.ifr_name, name, sizeof(ifr.ifr_name));
 
-	mii->phy_id  = loc->phy_id;
-	mii->reg_num = loc->reg;
+	mii->phy_id  = phyid;
+	mii->reg_num = reg;
 	mii->val_in  = *val;
 	mii->val_out = 0;
 
@@ -66,10 +65,10 @@ static int __phy_op(const struct loc *loc, uint16_t *val, int cmd)
 	return 0;
 }
 
-int phy_read(const struct loc *loc)
+int phy_read(const char *name, uint16_t phyid, uint16_t reg)
 {
 	uint16_t val = 0;
-	int err = __phy_op(loc, &val, SIOCGMIIREG);
+	int err = __phy_op(name, phyid, reg, &val, SIOCGMIIREG);
 
 	if (err) {
 		fprintf(stderr, "error: phy_read (%d)\n", err);
@@ -79,9 +78,9 @@ int phy_read(const struct loc *loc)
 	return val;
 }
 
-int phy_write(const struct loc *loc, uint16_t val)
+int phy_write(const char *name, uint16_t phyid, uint16_t reg, uint16_t val)
 {
-	int err = __phy_op(loc, &val, SIOCSMIIREG);
+	int err = __phy_op(name, phyid, reg, &val, SIOCSMIIREG);
 
 	if (err)
 		fprintf(stderr, "error: phy_write (%d)\n", err);
@@ -89,16 +88,12 @@ int phy_write(const struct loc *loc, uint16_t val)
 	return err;
 }
 
-uint32_t phy_id(const struct loc *loc)
+uint32_t phy_identifier(const char *ifname, int phyid)
 {
-	struct loc loc_id = *loc;
 	uint16_t id[2];
 
-	loc_id.reg = MII_PHYSID1;
-	id[0] = phy_read(&loc_id);
-	
-	loc_id.reg = MII_PHYSID2;
-	id[1] = phy_read(&loc_id);
+	id[0] = phy_read(ifname, phyid, MII_PHYSID1);
+	id[1] = phy_read(ifname, phyid, MII_PHYSID2);
 
 	return (id[0] << 16) | id[1];
 }
@@ -151,159 +146,43 @@ static int get_phyad(const char *name)
 	return link_settings->phy_address;
 }
 
-
-static int loc_segments(char *text, char **a, char **b)
+static int phytool_phyid(const char *ifname, char *regstr, uint16_t *regv)
 {
-	*a = strtok(text, "/");
-	if (!*a)
-		return 0;
-
-	*b = strtok(NULL, "/");
-	if (!*b)
-		return 1;
-
-	return 2;
-}
-
-static int phytool_parse_loc_segs(char *dev, char *reg,
-				  struct loc *loc)
-{
-	strncpy(loc->ifnam, dev, IFNAMSIZ - 1);
-
 	int pad, mmd;
 	char *end;
+	int phyid;
 
-	pad = get_phyad(dev);
+	pad = get_phyad(ifname);
 	if (pad < 0) {
-		return 1;
+		return -1;
 	}
 
-	if (!reg) {
-		loc->phy_id = pad;
-		loc->reg = REG_SUMMARY;
+	if (!regstr) {
+		phyid = pad;
+		*regv = REG_SUMMARY;
 	} else {
-		mmd = strtoul(reg, &end, 0);
+		mmd = strtoul(regstr, &end, 0);
 		if (!end[0]) {
-			loc->phy_id = pad;
-			loc->reg = mmd;
+			phyid = pad;
+			*regv = mmd;
 		} else if (end[0] == '.') {
-			loc->phy_id = mdio_phy_id_c45(pad, mmd);
-			loc->reg = strtoul(end + 1, NULL, 0);
+			phyid = mdio_phy_id_c45(pad, mmd);
+			*regv = strtoul(end + 1, NULL, 0);
 		} else {
-			return 1;
+			return -1;
 		}
 	}
 
-	return 0;
-}
-
-static int phytool_parse_loc(char *text, struct loc *loc, int strict)
-{
-	char *dev = NULL, *reg = NULL;
-	int segs;
-
-	segs = loc_segments(text, &dev, &reg);
-	if (segs < (strict ? 2 : 1))
-		return -EINVAL;
-
-	return phytool_parse_loc_segs(dev, reg, loc);
-}
-
-static int phytool_read(int argc, char **argv)
-{
-	struct loc loc;
-	int val;
-
-	if (!argc)
-		return 1;
-
-	if (phytool_parse_loc(argv[0], &loc, 1)) {
-		fprintf(stderr, "error: bad location format\n");
-		return 1;
-	}
-
-	val = phy_read(&loc);
-	if (val < 0)
-		return 1;
-
-	printf("0x%.4x\n", val);
-	return 0;
-}
-
-static int phytool_write(int argc, char **argv)
-{
-	struct loc loc;
-	unsigned long val;
-	int err;
-
-	if (argc < 2)
-		return 1;
-
-	if (phytool_parse_loc(argv[0], &loc, 1)) {
-		fprintf(stderr, "error: bad location format\n");
-		return 1;
-	}
-
-	val = strtoul(argv[1], NULL, 0);
-
-	err = phy_write (&loc, val);
-	if (err)
-		return 1;
-
-	return 0;
-}
-
-static int phytool_print(int argc, char **argv)
-{
-	struct loc loc;
-	int err;
-
-	if (!argc)
-		return 1;
-
-	if (phytool_parse_loc(argv[0], &loc, 0)) {
-		fprintf(stderr, "error: bad location format\n");
-		return 1;
-	}
-
-	err = print_phytool(&loc, NULL);
-	if (err)
-		return 1;
-	
-	return 0;
-}
-
-
-static int phytool_dump(int argc, char **argv)
-{
-	struct loc loc;
-	int pad;
-	int err;
-
-	if (argc < 2)
-		return 1;
-
-	strcpy(loc.ifnam, argv[0]);
-	pad = get_phyad(argv[0]);
-	if (pad < 0) {
-		return 1;
-	}
-
-	loc.phy_id = pad;
-
-	err = print_phytool(&loc, argv[1]);
-	if (err)
-		return 1;
-	
-	return 0;
+	return phyid;
 }
 
 static int phytool_usage(int code)
 {
-	printf("Usage: %s read  IFACE/[MMD.]REG\n"
-	       "       %s write IFACE/[MMD.]REG <0-0xffff>\n"
-	       "       %s print IFACE/[[MMD.]REG]\n"
-	       "       %s dump  IFACE path/to/phy_desc_yaml\n"
+	printf("Usage:\n"
+		   "        -r [ --read ] eth0 [MMD.]REG       Read value from register\n"
+	       "        -w [ --write ] eth0 [MMD.]REG val  Write value to register\n"
+	       "        -p [ --print ] eth0                Print value\n"
+	       "        -d [ --dump ] eth0 desc.yaml       Dump all registers provided in yaml\n"
 	       "\n"
 	       "Clause 22:\n"
 	       "\n"
@@ -314,51 +193,96 @@ static int phytool_usage(int code)
 	       "MMD  := <0-0x1f>\n"
 	       "REG  := <0-0xffff>\n"
 	       "\n"
-	       "Examples:\n"
-	       "       %s read  eth0/4.0x1000\n"
-	       "       %s write eth0/0 0x1140\n"
-	       "       %s print eth0/0x1c\n"
-	       "\n"
-	       "The `read` and `write` commands are simple register level\n"
-	       "accessors. The `print` command will pretty-print a register. When\n"
-	       "using the `print` command, the register is optional. If left out, the\n"
-	       "most common registers will be shown.\n"
-	       "\n"
 	       "Bug report address: https://github.com/junka/phytool/issues\n"
-	       "\n",
-	       __progname, __progname, __progname, __progname, __progname, __progname, __progname);
+	       "\n");
 	return code;
 }
 
 int main(int argc, char **argv)
 {
-#if 0
-	struct phy_desc *phy = read_phy_yaml(argv[1]);
-    printf("\n%s, %s\n", phy->manufactory, phy->name);
-    printf("reg_cls num %d\n", phy->num_cls);
-    for (int i = 0; i < phy->num_cls; i++) {
-        printf("regs group %s, MMD %d\n", phy->regcls[i].name, phy->regcls[i].dev);
-        for (int j = 0; j < phy->regcls[i].num_reg; j++) {
-            printf("\t%s: 0x%04x\n", phy->regcls[i].regs[j].name, phy->regcls[i].regs[j].addr);
-			for (int k = 0; k < phy->regcls[i].regs[j].num_field; k++) {
-				printf("\t\t%s: %u\n", phy->regcls[i].regs[j].fields[k].field, num_list_value(&phy->regcls[i].regs[j].fields[k].offset, 0xfffe));
-			}
+	static struct option long_options[] = {
+		{"read", required_argument, NULL, 'r'},
+		{"write", required_argument, NULL, 'w'},
+		{"print", required_argument, NULL, 'p'},
+		{"dump", required_argument, NULL, 'd'},
+		{"help", no_argument, NULL, 'h'},
+		{0, 0, 0, 0}
+	};
+
+	char *ifname, *regstr;
+	int phyid;
+	uint16_t reg;
+	int opt, err;
+
+	int val;
+	while ((opt = getopt_long(argc, argv, "r:w:p:d:h", long_options, NULL))!= -1) {
+		switch (opt) {
+			case 'r':
+				ifname = optarg;
+				regstr = argv[optind];
+				phyid = phytool_phyid(ifname, regstr, &reg);
+				if (phyid == -1) {
+					printf("no valid phyid\n");
+					return -1;
+				}
+				val = phy_read(ifname, phyid, reg);
+				printf("0x%x\n", val);
+				break;
+			case 'w':
+				ifname = optarg;
+				regstr = argv[optind];
+				val = strtoul(argv[optind+1], NULL, 0);
+				phyid = phytool_phyid(ifname, regstr, &reg);
+				if (phyid == -1) {
+					printf("no valid phyid\n");
+					return -1;
+				}
+				err = phy_write(ifname, phyid, reg, val);
+				if (err) {
+					printf("Fail to write\n");
+					return 1;
+				}
+				printf("Success\n");
+				break;
+			case 'p':
+				ifname = optarg;
+				regstr = argv[optind];
+				phyid = phytool_phyid(ifname, regstr, &reg);
+				if (phyid == -1) {
+					printf("no valid phyid\n");
+					return -1;
+				}
+				err = print_phytool(ifname, phyid, NULL);
+				if (err) {
+					printf("Fail to print\n");
+					return 1;
+				}
+				break;
+			case 'd':
+				ifname = optarg;
+				regstr = "0";
+				phyid = phytool_phyid(ifname, regstr, &reg);
+				err = print_phytool(ifname, phyid, argv[optind]);
+				if (err) {
+					printf("Fail to dump\n");
+					return 1;
+				}
+				break;
+			case 'h':
+				phytool_usage(0);
+				break;
+			case '?':
+				phytool_usage(0);
+				break;
+			default:
+				fprintf(stderr, "error: unknown command \"%s\"\n", argv[1]);
+				phytool_usage(1);
+				break;
 		}
-    }
-	return 0;
-#endif
+	}
+
 	if (argc < 2)
 		return phytool_usage(1);
 
-	if (!strcmp(argv[1], "read"))
-		return phytool_read(argc - 2, &argv[2]);
-	else if (!strcmp(argv[1], "write"))
-		return phytool_write(argc - 2, &argv[2]);
-	else if (!strcmp(argv[1], "print"))
-		return phytool_print(argc - 2, &argv[2]);
-	else if (!strcmp(argv[1], "dump"))
-		return phytool_dump(argc - 2, &argv[2]);
-
-	fprintf(stderr, "error: unknown command \"%s\"\n", argv[1]);
-	return phytool_usage(1);
+	return 0;
 }

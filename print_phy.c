@@ -23,7 +23,7 @@
 
 #include "phytool.h"
 
-void print_bool(const char *name, int on)
+static void print_bool(const char *name, int on)
 {
 	if (on)
 		fputs("\e[1m+", stdout);
@@ -36,7 +36,7 @@ void print_bool(const char *name, int on)
 		fputs("\e[0m", stdout);
 }
 
-void print_attr_name(const char *name, int indent)
+static void print_attr_name(const char *name, int indent)
 {
 	int len;
 
@@ -137,56 +137,34 @@ static void (*ieee_reg_printers[32])(uint16_t, int) = {
 	ieee_bmsr,
 };
 
-static int ieee_one(const struct loc *loc, int indent)
+static int ieee_one(const char *ifname, int phyid, uint16_t reg, int indent)
 {
-	int val = phy_read(loc);
+	int val = phy_read(ifname, phyid, reg);
 	if (val < 0)
 		return val;
 
-	if (loc->reg > 0x1f || !ieee_reg_printers[loc->reg])
+	if (reg > 0x1f || !ieee_reg_printers[reg])
 		printf("%*sieee-phy: reg:0x%.2x val:0x%.4x\n", indent, "",
-		       loc->reg, val);
+		       reg, val);
 	else
-		ieee_reg_printers[loc->reg](val, indent);
+		ieee_reg_printers[reg](val, indent);
 
 	return 0;
 }
 
-int print_phy_ieee(const struct loc *loc, int indent)
+int print_phy_ieee(const char *ifname, int phyid, uint16_t reg, int indent)
 {
-	struct loc loc_sum = *loc;
 
-	if (loc->reg != REG_SUMMARY)
-		return ieee_one(loc, indent);
+	if (reg != REG_SUMMARY)
+		return ieee_one(ifname, phyid, reg, indent);
 
-	printf("%*sieee-phy: id:0x%.8x\n\n", indent, "", phy_id(loc));
+	printf("%*sieee-phy: id:0x%.8x\n\n", indent, "", phy_identifier(ifname, phyid));
 
-	loc_sum.reg = 0;
-	ieee_one(&loc_sum, indent + INDENT);
+	ieee_one(ifname, phyid, 0, indent + INDENT);
 
 	putchar('\n');
 
-	loc_sum.reg = 1;
-	ieee_one(&loc_sum, indent + INDENT);
-	return 0;
-}
-
-int print_phy_pma(const struct loc *loc, int indent)
-{
-	struct loc loc_sum = *loc;
-
-	if (loc->reg != REG_SUMMARY)
-		return ieee_one(loc, indent);
-
-	printf("%*sieee-phy: id:0x%.8x\n\n", indent, "", phy_id(loc));
-
-	loc_sum.reg = 0;
-	ieee_one(&loc_sum, indent + INDENT);
-
-	putchar('\n');
-
-	loc_sum.reg = 1;
-	ieee_one(&loc_sum, indent + INDENT);
+	ieee_one(ifname, phyid, 1, indent + INDENT);
 	return 0;
 }
 
@@ -194,21 +172,21 @@ struct printer {
 	uint32_t id;
 	uint32_t mask;
 
-	int (*print)(const struct loc *loc, int indent);
+	int (*print)(const char *ifname, int phyid, uint16_t reg, int indent);
 };
 
 struct printer printer[] = {
 	{ .id = 0, .mask = 0, .print = print_phy_ieee },
-	{ .id = 1, .mask = 0, .print = print_phy_pma},
 	{ .print = NULL }
 };
 
-int print_phytool(struct loc *loc, const char *filename)
+int print_phytool(const char *ifname, int phyid, const char *filename)
 {
 	struct phy_desc* phy;
 	struct printer *p;
-	int phyad = loc->phy_id;
-	uint32_t id = phy_id(loc);
+	int phyad = phyid;
+	uint32_t id = phy_identifier(ifname, phyid);
+	uint32_t reg;
 
 	if (filename) {
 		phy = read_phy_yaml(filename);
@@ -216,10 +194,10 @@ int print_phytool(struct loc *loc, const char *filename)
 			printf("%s: %s\n", phy->name, phy->manufactory);
 			for (int i = 0; i < phy->num_cls; i ++) {
 				printf("Group %s, MMD %d\n", phy->regcls[i].name, phy->regcls[i].dev);
-				loc->phy_id = mdio_phy_id_c45(phyad, phy->regcls[i].dev);
+				phyid = mdio_phy_id_c45(phyad, phy->regcls[i].dev);
 				for (int j = 0; j < phy->regcls[i].num_reg; j++) {
-					loc->reg = phy->regcls[i].regs[j].addr;
-					int val = phy_read(loc);
+					reg = phy->regcls[i].regs[j].addr;
+					int val = phy_read(ifname, phyid, reg);
 					printf("0x%04x\t%60s\t0x%04x\n", phy->regcls[i].regs[j].addr, phy->regcls[i].regs[j].name, val);
 					for (int k = 0; k < phy->regcls[i].regs[j].num_field; k++) {
 						printf("\t\t%s: %u\n", phy->regcls[i].regs[j].fields[k].field, num_list_value(&phy->regcls[i].regs[j].fields[k].offset, val));
@@ -233,7 +211,7 @@ int print_phytool(struct loc *loc, const char *filename)
 
 	for (p = printer; p->print; p++)
 		if ((id & p->mask) == p->id)
-			return p->print(loc, 0);
+			return p->print(ifname, phyid, REG_SUMMARY, 0);
 
 	return -1;
 }
