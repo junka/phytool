@@ -63,7 +63,7 @@ Registers:
       device: 3
       regmap:
         - Reset and Control Register: 0x8000
-          SGMII Software Reset: 15
+          RGMII Software Reset: 15
           SGMII Software Reset: 13
           TX Disable Feature Enable: 3
         - Tx Disable Status Register: 0x8002
