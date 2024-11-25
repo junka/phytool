@@ -7,6 +7,7 @@ Usage
 -----
 
 Unlike the original one, PHYAD was automatically filled, So read C22 register or C45 MMD.register directly.
+```
 Usage:
       phytool -r [ --read ] eth0 [MMD.]REG       Read value from register
       phytool -w [ --write ] eth0 [MMD.]REG val  Write value to register
@@ -21,16 +22,15 @@ Clause 45 (not supported by all MDIO drivers):
 
 MMD  := <0-0x1f>
 REG  := <0-0xffff>
-
-Bug report address: https://github.com/junka/phytool/issues
+```
 
 Examples
 --------
-
+```
 ~ # phytool read eth4 4
 0x0de1
 
-~ # phytool dump eth0 phychips/mv88q2110.yaml
+~  # phytool dump eth0 phychips/mv88q2110.yaml
 MV88Q2110: Marvell
 Group IEEE PMA/PMD Registers, MMD 1
 phy_read: 32801, reg 00x0000                                      PMA/PMD Control Register 1    0x0040
@@ -77,10 +77,10 @@ phy_read: 32801, reg 9010x0901                               1000BASE-T1 PMA Sta
                 Received Polarity: 1
                 Receive Fault: 0
                 Receive Link Status: 0
+```
+
 Origin & References
 -------------------
 
-phytool is developed and maintained by Tobias Waldekranz.  
-Please file bug fixes and pull requests at [GitHub][]
+phytool is originally developed and maintained by Tobias Waldekranz.  
 
-[GitHub]: https://github.com/wkz/phytool
